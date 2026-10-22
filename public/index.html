@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tally — Bank Account Management &amp; ScoreIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- jsPDF and AutoTable for Statement PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <!-- App Shell: Persistent Left Sidebar + Main Content -->
+  <div class="app-layout">
+
+    <!-- -- LEFT SIDEBAR -- -->
+    <aside class="sidebar">
+      <!-- Brand & Emblem -->
+      <div class="sidebar-brand">
+        <div class="brand-emblem" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18"/>
+            <path d="M3 10h18"/>
+            <path d="M5 6l7-3 7 3"/>
+            <path d="M4 10v11"/>
+            <path d="M20 10v11"/>
+            <path d="M8 14v4"/>
+            <path d="M12 14v4"/>
+            <path d="M16 14v4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Tally</span>
+          <span class="brand-sub">Core OOP Bank</span>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="sidebar-nav" aria-label="Sidebar Navigation">
+        <div class="nav-section-label">MAIN NAVIGATION</div>
+
+        <button class="nav-item active" data-view="view-passbook" id="nav-passbook">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            <line x1="8" y1="6" x2="16" y2="6"/>
+            <line x1="8" y1="10" x2="14" y2="10"/>
+          </svg>
+          <span class="nav-text">Accounts &amp; Ledger</span>
+        </button>
+
+        <button class="nav-item" data-view="view-scoreiq" id="nav-scoreiq">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          <span class="nav-text">ScoreIQ Credit</span>
+        </button>
+
+        <button class="nav-item" data-view="view-create" id="nav-create">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+          <span class="nav-text">Open Account</span>
+        </button>
+
+        <button class="nav-item" data-view="view-oop" id="nav-oop">
+          <svg class="nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"/>
+            <polyline points="8 6 2 12 8 18"/>
+          </svg>
+          <span class="nav-text">Under the Hood</span>
+        </button>
+      </nav>
+
+      <!-- Sidebar Bottom: Account Switcher -->
+      <div class="sidebar-account-box">
+        <div class="sidebar-account-head">
+          <span class="nav-section-label">ACTIVE ACCOUNT</span>
+          <span class="account-total-count" id="accounts-count">0</span>
+        </div>
+        <select id="sidebar-account-select" class="sidebar-select">
+          <option value="">No accounts open</option>
+        </select>
+        <div class="sidebar-balance-preview" id="sidebar-balance-preview">
+          Balance: ₹0.00
+        </div>
+      </div>
+    </aside>
+
+    <!-- -- MAIN CONTENT VIEWPORT -- -->
+    <main class="main-viewport">
+
+      <!-- Top Notification Banner for OOP Method Overriding -->
+      <div id="method-banner" class="method-banner hidden" aria-live="polite">
+        <div class="method-indicator">
+          <svg class="method-svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          <div class="method-text">
+            <strong id="method-title">Ran SavingsAccount.withdraw()</strong>
+            <span id="method-detail">(polymorphic override)</span>
+          </div>
+        </div>
+        <div class="method-status-msg" id="method-msg"></div>
+      </div>
+
+      <!-- Global Inline Error Display -->
+      <div id="error-alert" class="error-alert hidden" role="alert">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <div class="error-text-wrap">
+          <span class="error-badge">LEDGER ERROR</span>
+          <span id="error-message"></span>
+        </div>
+        <button class="error-dismiss" id="btn-dismiss-error" aria-label="Close error">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- VIEW 1: PASSBOOK & LEDGER (DEFAULT) -->
+      <!-- ============================================================ -->
+      <section id="view-passbook" class="view-panel active">
+
+        <!-- Empty State (When no accounts exist) -->
+        <div id="no-accounts-state" class="empty-state-card hidden">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+          <h2 class="empty-state-title">No Accounts in Ledger</h2>
+          <p class="empty-state-desc">You do not have any open accounts. Create a savings or current account to start recording transactions.</p>
+          <button class="btn btn-primary" onclick="switchView('view-create')">
+            Open Your First Account
+          </button>
+        </div>
+
+        <!-- Active Passbook Slip -->
+        <article id="active-passbook-content" class="ledger-card passbook-card">
+          <div class="perforated-strip"></div>
+
+          <div class="passbook-slip-header">
+            <div class="slip-left">
+              <span class="slip-bank-mark">TALLY • ACCOUNT LEDGER</span>
+              <h2 class="slip-holder" id="active-holder">—</h2>
+              <div class="slip-meta-grid">
+                <div>
+                  <span class="meta-label">A/C NUMBER</span>
+                  <span class="meta-value mono" id="active-number">—</span>
+                </div>
+                <div>
+                  <span class="meta-label">CLASSIFICATION</span>
+                  <span class="meta-value" id="active-type">—</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slip-right">
+              <div class="rubber-stamp" id="stamp-badge">
+                <span id="stamp-text">SAVINGS</span>
+              </div>
+              <div class="slip-balance-box">
+                <span class="balance-label">CURRENT BALANCE</span>
+                <span class="balance-amount mono" id="active-balance">₹0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="oop-description-box" id="active-description">
+            Account initialized.
+          </div>
+
+          <!-- Transaction Actions Area -->
+          <div class="ledger-actions-section">
+            <div class="actions-nav" role="tablist">
+              <button class="action-tab active" data-action="deposit" role="tab">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <polyline points="19 12 12 19 5 12"/>
+                </svg>
+                <span>Deposit</span>
+              </button>
+              <button class="action-tab" data-action="withdraw" role="tab">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="19" x2="12" y2="5"/>
+                  <polyline points="5 12 12 5 19 12"/>
+                </svg>
+                <span>Withdraw</span>
+              </button>
+              <button class="action-tab" data-action="transfer" role="tab">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="17 1 21 5 17 9"/>
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+                  <polyline points="7 23 3 19 7 15"/>
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                </svg>
+                <span>Transfer</span>
+              </button>
+              <button class="action-tab" data-action="month-end" role="tab">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span>Month End</span>
+              </button>
+            </div>
+
+            <!-- Form: Deposit -->
+            <form id="action-form-deposit" class="action-form-pane active">
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label class="form-label" for="deposit-amount">Deposit Amount (₹)</label>
+                  <div class="input-prefix-wrapper">
+                    <span class="input-currency-prefix">₹</span>
+                    <input type="number" id="deposit-amount" class="form-input mono" min="1" step="any" required>
+                  </div>
+                </div>
+                <div class="form-group flex-2">
+                  <label class="form-label" for="deposit-desc">Narration / Remarks</label>
+                  <input type="text" id="deposit-desc" class="form-input">
+                </div>
+                <div class="form-group form-btn-align">
+                  <button type="submit" class="btn btn-primary">Credit Amount</button>
+                </div>
+              </div>
+              <small class="form-hint">Invokes <code class="code-ref">Account.deposit()</code>. Balance updates immediately.</small>
+            </form>
+
+            <!-- Form: Withdraw -->
+            <form id="action-form-withdraw" class="action-form-pane">
+              <div class="form-row">
+                <div class="form-group flex-1">
+                  <label class="form-label" for="withdraw-amount">Withdrawal Amount (₹)</label>
+                  <div class="input-prefix-wrapper">
+                    <span class="input-currency-prefix">₹</span>
+                    <input type="number" id="withdraw-amount" class="form-input mono" min="1" step="any" required>
+                  </div>
+                </div>
+                <div class="form-group flex-2">
+                  <label class="form-label" for="withdraw-desc">Narration / Remarks</label>
+                  <input type="text" id="withdraw-desc" class="form-input">
+                </div>
+                <div class="form-group form-btn-align">
+                  <button type="submit" class="btn btn-primary">Debit Amount</button>
+                </div>
+              </div>
+              <small class="form-hint" id="withdraw-hint">
+                Savings: Minimum ₹500 must remain (max 5/month). Current: Overdraft allowed up to ₹10,000.
+              </small>
+            </form>
+
+            <!-- Form: Transfer -->
+            <form id="action-form-transfer" class="action-form-pane">
+              <div class="form-row">
+                <div class="form-group flex-2">
+                  <label class="form-label" for="transfer-target">Beneficiary Account</label>
+                  <select id="transfer-target" class="form-input" required>
+                    <option value="">Choose recipient account</option>
+                  </select>
+                </div>
+                <div class="form-group flex-1">
+                  <label class="form-label" for="transfer-amount">Transfer Amount (₹)</label>
+                  <div class="input-prefix-wrapper">
+                    <span class="input-currency-prefix">₹</span>
+                    <input type="number" id="transfer-amount" class="form-input mono" min="1" step="any" required>
+                  </div>
+                </div>
+                <div class="form-group form-btn-align">
+                  <button type="submit" class="btn btn-primary">Transfer Funds</button>
+                </div>
+              </div>
+              <small class="form-hint">Invokes <code class="code-ref">withdraw()</code> on source &amp; <code class="code-ref">deposit()</code> on destination.</small>
+            </form>
+
+            <!-- Form: Month End -->
+            <div id="action-form-month-end" class="action-form-pane">
+              <div class="month-end-box">
+                <div class="month-end-info">
+                  <strong class="month-end-headline" id="month-end-headline">Monthly Ledger Settlement</strong>
+                  <p class="month-end-detail" id="month-end-detail">
+                    Savings Accounts earn 3.5% p.a. interest. Current Accounts deduct ₹100 maintenance fee.
+                  </p>
+                </div>
+                <button type="button" id="btn-run-month-end" class="btn btn-secondary">
+                  Execute Month End
+                </button>
+              </div>
+              <small class="form-hint">Runs polymorphically overridden <code class="code-ref">month_end()</code> on the active object.</small>
+            </div>
+          </div>
+
+          <!-- Transaction Table & PDF Download Header -->
+          <div class="statement-section">
+            <div class="statement-header">
+              <div class="statement-title-wrap">
+                <h3 class="statement-title">Statement of Transactions</h3>
+                <span class="statement-count" id="statement-count">0 entries</span>
+              </div>
+              <button type="button" id="btn-download-pdf" class="btn btn-secondary btn-sm" title="Download account statement as PDF">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                <span>Download Statement (PDF)</span>
+              </button>
+            </div>
+
+            <div class="table-scroll-wrapper">
+              <table class="passbook-table">
+                <thead>
+                  <tr>
+                    <th style="width: 22%;">DATE &amp; TIME</th>
+                    <th style="width: 38%;">PARTICULARS / NARRATION</th>
+                    <th style="width: 13%; text-align: right;">DEBIT (-)</th>
+                    <th style="width: 13%; text-align: right;">CREDIT (+)</th>
+                    <th style="width: 14%; text-align: right;">BALANCE</th>
+                  </tr>
+                </thead>
+                <tbody id="statement-tbody">
+                  <tr class="empty-row">
+                    <td colspan="5">No transactions recorded yet. Perform a deposit or withdrawal to begin your ledger.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- VIEW 2: SCOREIQ ALTERNATIVE CREDIT SCORING -->
+      <!-- ============================================================ -->
+      <section id="view-scoreiq" class="view-panel">
+        <article class="ledger-card scoreiq-dedicated-card">
+          <div class="scoreiq-header">
+            <div>
+              <div class="scoreiq-tag">ALTERNATIVE CREDIT SCORING ENGINE</div>
+              <h2 class="scoreiq-title">ScoreIQ: Credit Score Without Loan History</h2>
+              <p class="scoreiq-sub">
+                Deterministic, rule-based scoring engine evaluating real-world cash-flow discipline, employment stability, and account activity.
+              </p>
+            </div>
+            <div class="scoreiq-header-actions">
+              <button type="button" id="btn-autofill-passbook" class="btn btn-secondary btn-sm" title="Pull metrics from your active account ledger">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                </svg>
+                <span>Auto-fill from Ledger</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ScoreIQ Underwriting Modes: Statement Review vs Manual Entry -->
+          <div class="scoreiq-mode-tabs" role="tablist">
+            <button type="button" class="scoreiq-tab-btn active" data-mode="statement" id="tab-scoreiq-statement" role="tab">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>Review External Statement</span>
+              <span class="mode-pill-badge mono">CSV / TXT Parser</span>
+            </button>
+            <button type="button" class="scoreiq-tab-btn" data-mode="manual" id="tab-scoreiq-manual" role="tab">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="9" y1="21" x2="9" y2="9"></line>
+              </svg>
+              <span>Manual Cash-Flow Entry</span>
+            </button>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- MODE 1: EXTERNAL STATEMENT REVIEW (DEFAULT)-->
+          <!-- ========================================== -->
+          <div id="scoreiq-mode-statement" class="scoreiq-mode-pane active">
+            <!-- Sample Presets Toolbar -->
+            <div class="statement-presets-bar">
+              <span class="presets-label mono">LOAD VERIFIABLE SAMPLES:</span>
+              <div class="preset-buttons-group">
+                <button type="button" class="btn-preset active" data-preset="gig">
+                  Swiggy Delivery Partner
+                </button>
+                <button type="button" class="btn-preset" data-preset="retail">
+                  Kirana Store Merchant
+                </button>
+                <button type="button" class="btn-preset" data-preset="salaried">
+                  Fresh Graduate (Salaried)
+                </button>
+                <button type="button" class="btn-preset" data-preset="bounces">
+                  Stressed A/C (High Risk)
+                </button>
+              </div>
+            </div>
+
+            <!-- Statement Input Form -->
+            <form id="form-scoreiq-statement" class="statement-input-form">
+              <div class="form-row-2">
+                <div class="form-group flex-2">
+                  <label class="form-label" for="siq-stmt-name">Applicant Full Name</label>
+                  <input type="text" id="siq-stmt-name" class="form-input" value="Rohan Kumar" required>
+                </div>
+                <div class="form-group flex-1">
+                  <label class="form-label" for="siq-stmt-emp">Employment Classification</label>
+                  <select id="siq-stmt-emp" class="form-input" required>
+                    <option value="gig worker" selected>Gig Worker (Delivery / Rideshare)</option>
+                    <option value="salaried">Salaried (Full-time Employee)</option>
+                    <option value="self-employed">Self-Employed (Shopkeeper / Merchant)</option>
+                    <option value="rural worker">Rural Worker / Artisan / Agriculture</option>
+                    <option value="student">Student / Fresh Graduate</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="statement-editor-box">
+                <div class="statement-editor-header">
+                  <div>
+                    <label class="form-label mb-0" for="siq-stmt-text">Bank Statement / Ledger Records</label>
+                    <span class="editor-subtext">Paste raw CSV, pipe-separated table, or text statement export.</span>
+                  </div>
+                  <div class="statement-upload-actions">
+                    <input type="file" id="siq-stmt-file" class="hidden-file-input" accept=".csv,.txt,.dat,.log">
+                    <button type="button" id="btn-trigger-file-upload" class="btn btn-secondary btn-sm">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                      </svg>
+                      <span id="file-upload-status-text">Upload CSV / Statement File</span>
+                    </button>
+                  </div>
+                </div>
+
+                <textarea id="siq-stmt-text" class="form-input mono statement-textarea" rows="8" placeholder="Date, Narration, Debit, Credit, Balance
+2026-09-01, Opening Balance, 0.00, 0.00, 5200.00
+2026-09-03, SWIGGY WEEKLY PAYOUT CR, 0.00, 9450.00, 14650.00
+2026-09-05, UPI / Fuel IndianOil DR, 1200.00, 0.00, 13450.00
+..."></textarea>
+                <div class="statement-format-hints mono">
+                  Auto-detects: Inflows (Credits), Outflows (Debits), UPI transaction count, Recurring employer/gig platform payouts, and ECS/Cheque bounces.
+                </div>
+              </div>
+
+              <div class="scoreiq-submit-bar">
+                <button type="submit" id="btn-analyze-statement" class="btn btn-primary">
+                  Run Underwriting Review
+                </button>
+              </div>
+            </form>
+
+            <!-- Statement Review Report Output -->
+            <div id="statement-review-card" class="statement-review-card hidden">
+              <!-- Report Top Header & Verdict -->
+              <div class="review-report-header">
+                <div class="review-header-left">
+                  <span class="report-badge mono">OFFICIAL UNDERWRITING REPORT</span>
+                  <h3 class="review-applicant-name" id="review-applicant-display">Rohan Kumar</h3>
+                  <div class="review-meta-pills">
+                    <span class="review-pill" id="review-emp-display">Gig Worker</span>
+                    <span class="review-pill mono" id="review-tx-display">14 Transactions Evaluated</span>
+                    <span class="review-pill mono" id="review-upi-display">9 UPI Transfers</span>
+                  </div>
+                </div>
+                <div class="review-header-right">
+                  <div class="verdict-banner-pill" id="review-verdict-banner">
+                    RECOMMENDED: PRE-APPROVED FOR CREDIT
+                  </div>
+                  <div class="eligible-limit-box">
+                    <span class="limit-label">RECOMMENDED CREDIT LINE</span>
+                    <span class="limit-amount mono" id="review-limit-display">₹60,000.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Underwriting Summary Narrative -->
+              <div class="underwriting-narrative-box">
+                <span class="narrative-label mono">UNDERWRITING EXECUTIVE SUMMARY</span>
+                <p class="narrative-text" id="review-summary-display">—</p>
+              </div>
+
+              <!-- Cash Flow & Financial Health Grid -->
+              <div class="review-stats-grid">
+                <div class="stat-card">
+                  <span class="stat-label">VERIFIED INFLOWS</span>
+                  <span class="stat-value credit-val mono" id="review-credits-display">₹0.00</span>
+                  <span class="stat-sub">Monthly incoming funds</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">VERIFIED OUTFLOWS</span>
+                  <span class="stat-value debit-val mono" id="review-debits-display">₹0.00</span>
+                  <span class="stat-sub">Living &amp; operational burn</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">NET OPERATING BUFFER</span>
+                  <span class="stat-value mono" id="review-margin-display">₹0.00</span>
+                  <span class="stat-sub">Monthly retained surplus</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">OUTFLOW BURN RATE</span>
+                  <span class="stat-value mono" id="review-burn-display">0.0%</span>
+                  <span class="stat-sub">Debits / Inbound Ratio</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">DISHONOR / BOUNCES</span>
+                  <span class="stat-value mono" id="review-bounces-display">0</span>
+                  <span class="stat-sub">Cheque / ECS failures</span>
+                </div>
+                <div class="stat-card">
+                  <span class="stat-label">SCOREIQ RATING</span>
+                  <span class="stat-value mono" id="review-score-display">---</span>
+                  <span class="stat-sub" id="review-score-band">Pending Calculation</span>
+                </div>
+              </div>
+
+              <!-- Strengths & Risk Watchlist -->
+              <div class="review-analysis-cols">
+                <div class="review-col strengths-col">
+                  <span class="analysis-col-title">KEY UNDERWRITING STRENGTHS</span>
+                  <ul class="analysis-list" id="review-strengths-list">
+                    <!-- Populated dynamically -->
+                  </ul>
+                </div>
+                <div class="review-col risks-col">
+                  <span class="analysis-col-title">RISK FACTORS &amp; WATCHLIST</span>
+                  <ul class="analysis-list" id="review-risks-list">
+                    <!-- Populated dynamically -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- MODE 2: MANUAL CASH-FLOW ENTRY             -->
+          <!-- ========================================== -->
+          <div id="scoreiq-mode-manual" class="scoreiq-mode-pane hidden">
+            <!-- Interactive Manual Data Entry Form -->
+            <form id="form-scoreiq-manual" class="scoreiq-manual-form">
+              <div class="scoreiq-form-grid-layout">
+                <!-- Column 1: Personal & Employment -->
+                <div class="scoreiq-section-box">
+                  <div class="section-box-header">
+                    <span class="section-box-tag mono">STEP 1</span>
+                    <h3 class="section-box-title">Applicant Profile</h3>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="siq-name">Full Name</label>
+                    <input type="text" id="siq-name" class="form-input" required>
+                  </div>
+                  <div class="form-row-2">
+                    <div class="form-group">
+                      <label class="form-label" for="siq-age">Age (Years)</label>
+                      <input type="number" id="siq-age" class="form-input mono" min="18" max="100" value="29" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="siq-years">Experience (Yrs)</label>
+                      <input type="number" id="siq-years" class="form-input mono" min="0" max="50" step="0.5" value="2.0" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="siq-employment">Employment Type</label>
+                    <select id="siq-employment" class="form-input" required>
+                      <option value="gig worker" selected>Gig Worker (Delivery / Rideshare / Freelance)</option>
+                      <option value="salaried">Salaried (Full-time Employee)</option>
+                      <option value="self-employed">Self-Employed (Shopkeeper / Micro-business)</option>
+                      <option value="rural worker">Rural Worker / Artisan / Agriculture</option>
+                      <option value="student">Student / Fresh Graduate</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Column 2: Income & Cash Flow -->
+                <div class="scoreiq-section-box">
+                  <div class="section-box-header">
+                    <span class="section-box-tag mono">STEP 2</span>
+                    <h3 class="section-box-title">Cash Flow &amp; Discipline</h3>
+                  </div>
+                  <div class="form-row-2">
+                    <div class="form-group">
+                      <label class="form-label" for="siq-income">Monthly Inflow (₹)</label>
+                      <div class="input-prefix-wrapper">
+                        <span class="input-currency-prefix">₹</span>
+                        <input type="number" id="siq-income" class="form-input mono" min="0" step="any" value="35000" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="siq-expenses">Monthly Expenses (₹)</label>
+                      <div class="input-prefix-wrapper">
+                        <span class="input-currency-prefix">₹</span>
+                        <input type="number" id="siq-expenses" class="form-input mono" min="0" step="any" value="22000" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row-2">
+                    <div class="form-group">
+                      <label class="form-label" for="siq-upi">Monthly UPI Count</label>
+                      <input type="number" id="siq-upi" class="form-input mono" min="0" value="35" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="siq-missed">Missed Dues (12m)</label>
+                      <input type="number" id="siq-missed" class="form-input mono" min="0" max="60" value="0" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="siq-loans">Active Loan / EMI Lines</label>
+                    <input type="number" id="siq-loans" class="form-input mono" min="0" max="20" value="0" required>
+                  </div>
+                </div>
+
+                <!-- Column 3: Account Liquidity -->
+                <div class="scoreiq-section-box">
+                  <div class="section-box-header">
+                    <span class="section-box-tag mono">STEP 3</span>
+                    <h3 class="section-box-title">Account Liquidity</h3>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="siq-balance">Avg Bank Balance (₹)</label>
+                    <div class="input-prefix-wrapper">
+                      <span class="input-currency-prefix">₹</span>
+                      <input type="number" id="siq-balance" class="form-input mono" min="0" step="any" value="8500" required>
+                    </div>
+                  </div>
+                  <div class="form-row-2">
+                    <div class="form-group">
+                      <label class="form-label" for="siq-emi">Monthly EMI (₹)</label>
+                      <div class="input-prefix-wrapper">
+                        <span class="input-currency-prefix">₹</span>
+                        <input type="number" id="siq-emi" class="form-input mono" min="0" step="any" value="0" required>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="siq-bounces">Bounces (6m)</label>
+                      <input type="number" id="siq-bounces" class="form-input mono" min="0" max="30" value="0" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="siq-salary">Recurring Salary Detected</label>
+                    <select id="siq-salary" class="form-input" required>
+                      <option value="true" selected>Yes (Predictable periodical credits)</option>
+                      <option value="false">No (Variable / intermittent cash flow)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="scoreiq-submit-bar">
+                <button type="submit" id="btn-calculate-scoreiq" class="btn btn-primary">
+                  Calculate ScoreIQ
+                </button>
+              </div>
+            </form>
+
+            <!-- Score Result Dashboard -->
+            <div class="scoreiq-results-panel" id="scoreiq-results-panel">
+              <div class="scoreiq-body">
+                <!-- Semicircle Gauge & Risk Band -->
+                <div class="scoreiq-gauge-col">
+                  <div class="gauge-container">
+                    <svg viewBox="0 0 200 120" class="gauge-svg">
+                      <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#ded5c4" stroke-width="16" stroke-linecap="round"/>
+                      <path id="gauge-progress" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#1f5a45" stroke-width="16" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3"/>
+                    </svg>
+                    <div class="gauge-value-box">
+                      <span class="gauge-score mono" id="scoreiq-score">---</span>
+                      <span class="gauge-scale">OUT OF 850</span>
+                    </div>
+                  </div>
+                  <div class="scoreiq-band-badge" id="scoreiq-band">READY</div>
+                  <div class="scoreiq-risk-pill" id="scoreiq-risk-band">Risk Profile: Pending Input</div>
+                  <div class="scoreiq-pd-text" id="scoreiq-pd-text">Default Probability: --%</div>
+                </div>
+
+                <!-- Top Driver & Explanation Summary -->
+                <div class="scoreiq-summary-col">
+                  <div class="top-driver-box">
+                    <span class="top-driver-label">PRIMARY SCORE DRIVER</span>
+                    <div class="top-driver-val" id="scoreiq-top-driver">Awaiting calculation</div>
+                    <p class="scoreiq-explanation" id="scoreiq-explanation">
+                      Fill out applicant metrics or click "Auto-fill from Ledger" and calculate to generate your score breakdown.
+                    </p>
+                  </div>
+
+                  <!-- Plain-Language Tips -->
+                  <div class="scoreiq-tips-box">
+                    <span class="tips-label">ACTIONABLE ADVICE TO IMPROVE SCORE:</span>
+                    <ul id="scoreiq-tips-list" class="tips-list">
+                      <li>Maintain steady inflows and zero payment defaults to boost credit score.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dynamic Feature Contributions (SHAP Factor Breakdown) -->
+              <div class="shap-breakdown-section">
+                <div class="shap-header">
+                  <h3 class="shap-title">Deterministic Feature Contributions (SHAP Breakdown)</h3>
+                  <span class="shap-subtext mono">Contribution to base score of 575 pts</span>
+                </div>
+                <div class="shap-factors-grid" id="shap-factors-grid">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clean Passbook Styled CIBIL vs ScoreIQ Comparison -->
+          <div class="cibil-vs-scoreiq-card">
+            <div class="comparison-grid">
+              <div class="comp-col comp-cibil">
+                <div class="comp-badge cibil-badge">TRADITIONAL BUREAUS (CIBIL)</div>
+                <h3 class="comp-heading">Debt-History Dependent</h3>
+                <ul class="comp-list">
+                  <li>Evaluates past loan and formal debt repayments only.</li>
+                  <li>First-time earners, gig workers, and students have zero credit file.</li>
+                  <li>Overlooks high liquid savings, consistent earnings, and cash flow.</li>
+                  <li>Leaves over 190M+ disciplined Indians credit-invisible.</li>
+                </ul>
+              </div>
+
+              <div class="comp-divider">
+                <span>VS</span>
+              </div>
+
+              <div class="comp-col comp-scoreiq">
+                <div class="comp-badge scoreiq-badge">SCOREIQ ALTERNATIVE MODEL</div>
+                <h3 class="comp-heading">Cash-Flow &amp; Discipline Based</h3>
+                <ul class="comp-list">
+                  <li>Scores real-time account inflows and transaction velocity.</li>
+                  <li>Rewards regular deposits and positive savings retention.</li>
+                  <li>Penalizes overdraft stress and liquid distress transparently.</li>
+                  <li>100% deterministic, rule-based arithmetic with zero black-box ML.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </article>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- VIEW 3: OPEN NEW ACCOUNT -->
+      <!-- ============================================================ -->
+      <section id="view-create" class="view-panel">
+        <article class="ledger-card create-dedicated-card">
+          <div class="card-head">
+            <h2 class="card-title">Open New Bank Account</h2>
+            <span class="card-number">FORM 01-A</span>
+          </div>
+          <p class="card-subtext">Choose an account type and enter holder details to open an account.</p>
+
+          <form id="form-create-account" class="ledger-form">
+            <div class="form-group">
+              <label class="form-label">Classification</label>
+              <div class="type-toggle-group">
+                <label class="toggle-btn active" id="toggle-savings-label">
+                  <input type="radio" name="acc_type" value="savings" checked>
+                  <span class="toggle-title">Savings Account</span>
+                  <span class="toggle-sub">3.5% Int • ₹500 Min Balance</span>
+                </label>
+                <label class="toggle-btn" id="toggle-current-label">
+                  <input type="radio" name="acc_type" value="current">
+                  <span class="toggle-title">Current Account</span>
+                  <span class="toggle-sub">₹10,000 Overdraft • ₹100 Fee</span>
+                </label>
+                <label class="toggle-btn" id="toggle-senior-label">
+                  <input type="radio" name="acc_type" value="senior">
+                  <span class="toggle-title">Senior Citizen</span>
+                  <span class="toggle-sub">Multilevel • 4.25% Int • Senior Perks</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="input-holder" class="form-label">Account Holder Full Name</label>
+              <input type="text" id="input-holder" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+              <label for="input-opening" class="form-label">Initial Opening Deposit (₹)</label>
+              <div class="input-prefix-wrapper">
+                <span class="input-currency-prefix">₹</span>
+                <input type="number" id="input-opening" class="form-input mono" min="0" step="any" required>
+              </div>
+              <small class="form-hint" id="opening-hint">Savings requires minimum deposit of ₹500</small>
+            </div>
+
+            <button type="submit" id="btn-create-submit" class="btn btn-primary">
+              Create Account
+            </button>
+          </form>
+        </article>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- VIEW 4: UNDER THE HOOD -->
+      <!-- ============================================================ -->
+      <section id="view-oop" class="view-panel">
+
+        <!-- Live Runtime Dispatch Inspector Banner -->
+        <article class="ledger-card live-dispatch-card">
+          <div class="card-head">
+            <div>
+              <span class="card-number">LIVE ACTIVITY</span>
+              <h2 class="card-title">What just ran</h2>
+            </div>
+            <div class="status-indicator-tag">LIVE TRACE</div>
+          </div>
+          <div class="dispatch-trace-content">
+            <div class="dispatch-col">
+              <span class="dispatch-meta-label">METHOD</span>
+              <span class="dispatch-code-val mono" id="trace-method-name">No activity yet</span>
+            </div>
+            <div class="dispatch-col">
+              <span class="dispatch-meta-label">RESULT</span>
+              <span class="dispatch-desc-val" id="trace-resolution-desc">
+                Run a transaction or demo to see which account method handles it.
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Interactive Live OOP Test Bench -->
+        <article class="ledger-card live-testbench-card">
+          <div class="card-head">
+            <div>
+              <span class="card-number">QUICK DEMOS</span>
+              <h2 class="card-title">See it in action</h2>
+            </div>
+          </div>
+
+          <div class="testbench-actions-grid">
+            <button type="button" class="btn-testbench" id="btn-test-min-balance">
+              <strong>Minimum balance</strong>
+            </button>
+            <button type="button" class="btn-testbench" id="btn-test-overdraft">
+              <strong>Current account overdraft</strong>
+            </button>
+            <button type="button" class="btn-testbench" id="btn-test-recursion">
+              <strong>Compound interest</strong>
+            </button>
+            <button type="button" class="btn-testbench" id="btn-test-multilevel">
+              <strong>Senior account rate</strong>
+            </button>
+            <button type="button" class="btn-testbench" id="btn-test-file-io">
+              <strong>Export a sample ledger</strong>
+            </button>
+          </div>
+
+          <!-- Test Bench Live Output Console -->
+          <details class="testbench-output-details" id="testbench-output-details">
+            <summary>Demo output</summary>
+            <div class="testbench-console-box" id="testbench-console">
+            <div class="console-header">
+              <span class="console-title mono">DEMO OUTPUT</span>
+              <button type="button" class="btn-console-clear mono" id="btn-clear-console">Clear Console</button>
+            </div>
+            <pre class="console-output mono" id="testbench-log">Run a demo to see its result.</pre>
+            </div>
+          </details>
+          </div>
+        </article>
+
+        <!-- Side-by-Side Code Comparison: Method Overriding in Action -->
+        <details class="under-hood-details">
+          <summary>See method overriding <span>Code example</span></summary>
+          <div class="under-hood-details-content">
+        <article class="ledger-card oop-code-comparison-card">
+          <div class="card-head">
+            <div>
+              <span class="card-number">CODE EXAMPLE</span>
+              <h2 class="card-title">Withdrawal rules by account</h2>
+            </div>
+            <span class="code-compare-badge mono">Account vs SavingsAccount vs CurrentAccount</span>
+          </div>
+
+          <div class="code-comparison-grid">
+            <div class="code-box">
+              <div class="code-box-head">
+                <span class="code-box-title">Base: Account.java</span>
+                <span class="code-box-tag">Standard Zero Floor</span>
+              </div>
+              <pre class="code-snippet mono"><code>public Transaction withdraw(double amount)
+       throws BankException {
+    if (this.balance - amount &lt; 0) {
+        throw new InsufficientFundsException(
+            "Insufficient funds: Balance is ₹" + balance);
+    }
+    this.balance -= amount;
+    return new Transaction("WITHDRAWAL", ...);
+}</code></pre>
+              <p class="code-box-note">Baseline rule: standard accounts cannot drop below zero.</p>
+            </div>
+
+            <div class="code-box">
+              <div class="code-box-head">
+                <span class="code-box-title">Override: SavingsAccount.java</span>
+                <span class="code-box-tag">₹1,000 Minimum Floor</span>
+              </div>
+              <pre class="code-snippet mono"><code>@Override
+public Transaction withdraw(double amount)
+       throws BankException {
+    if (getCurrentMonthWithdrawalCount() &gt;= 5) {
+        throw new WithdrawalLimitExceededException();
+    }
+    if (this.balance - amount &lt; 1000.0) {
+        throw new MinimumBalanceException(
+            "Must retain minimum ₹1,000");
+    }
+    this.balance -= amount;
+    return new Transaction("WITHDRAWAL", ...);
+}</code></pre>
+              <p class="code-box-note">Enforces both 5 withdrawals/month limit and ₹1,000 minimum balance.</p>
+            </div>
+
+            <div class="code-box">
+              <div class="code-box-head">
+                <span class="code-box-title">Override: CurrentAccount.java</span>
+                <span class="code-box-tag">₹10,000 Overdraft</span>
+              </div>
+              <pre class="code-snippet mono"><code>@Override
+public Transaction withdraw(double amount)
+       throws BankException {
+    double minAllowed = -10000.00; // Overdraft
+    if (this.balance - amount &lt; minAllowed) {
+        throw new InsufficientFundsException(
+            "Overdraft limit breached: max ₹10K");
+    }
+    this.balance -= amount;
+    return new Transaction("WITHDRAWAL", ...);
+}</code></pre>
+              <p class="code-box-note">Permits negative balances down to -₹10,000 for business liquidity.</p>
+            </div>
+          </div>
+        </article>
+          </div>
+        </details>
+
+        <!-- Custom Exception Hierarchy -->
+        <details class="under-hood-details">
+          <summary>View exception types <span>4 custom exceptions</span></summary>
+          <div class="under-hood-details-content">
+        <article class="ledger-card exception-hierarchy-card">
+          <div class="card-head">
+            <div>
+              <span class="card-number">ERROR HANDLING</span>
+              <h2 class="card-title">Custom exceptions</h2>
+            </div>
+            <span class="code-compare-badge mono">java.lang.Exception</span>
+          </div>
+
+          <div class="exceptions-tree-view">
+            <div class="tree-node root-node mono">
+              <strong>Exception</strong> (Java standard library base)
+            </div>
+            <div class="tree-node parent-node mono">
+              └── <strong>BankException</strong> extends Exception (Domain base exception)
+            </div>
+            <div class="tree-children-grid mono">
+              <div class="tree-child">
+                ├── <strong>InsufficientFundsException</strong>
+                <p>Thrown when balance or overdraft limit is breached.</p>
+              </div>
+              <div class="tree-child">
+                ├── <strong>MinimumBalanceException</strong>
+                <p>Thrown when savings balance drops below ₹1,000.</p>
+              </div>
+              <div class="tree-child">
+                ├── <strong>WithdrawalLimitExceededException</strong>
+                <p>Thrown when savings withdrawals exceed 5 per month.</p>
+              </div>
+              <div class="tree-child">
+                └── <strong>InvalidAmountException</strong>
+                <p>Thrown when transaction amount is less than or equal to ₹0.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+          </div>
+        </details>
+
+        <!-- Dynamic Class Hierarchy Inspector -->
+        <article class="ledger-card under-the-hood-section">
+          <div class="card-head">
+            <div>
+              <span class="card-number">CLASS MAP</span>
+              <h2 class="card-title">How accounts relate</h2>
+            </div>
+          </div>
+
+          <p class="card-subtext">
+            Select a class to inspect its methods. Live activity is highlighted.
+          </p>
+
+          <div class="oop-tree-container" id="oop-tree">
+            <!-- Dynamically rendered -->
+          </div>
+        </article>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
