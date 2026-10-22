@@ -1,5 +1,5 @@
 """
-api/index.py - Flask Serverless API Entrypoint for PassBook & ScoreIQ
+api/index.py - Flask Serverless API Entrypoint for Tally & ScoreIQ
 
 This file acts as the bridge between HTTP requests and the OOP domain models.
 Designed for Vercel Serverless Functions:

@@ -1,5 +1,5 @@
 """
-test_models.py - Unit & Integration Test Suite for PassBook & ScoreIQ
+test_models.py - Unit & Integration Test Suite for Tally & ScoreIQ
 
 Tests:
 1. Core OOP inheritance, encapsulation, and polymorphism.

@@ -11,7 +11,7 @@ import java.util.Locale;
  * 2. Deterministic & Transparent Logic: Rule-based, weighted financial scoring for credit-invisible citizens
  *    (gig workers, fresh graduates, self-employed professionals, and rural workers) who lack formal CIBIL debt histories.
  * 3. Static Factory / Utility Methods: ScoreIQ.calculate(account) and ScoreIQ.calculate(user, bank).
- * 4. Dual Compatibility: Evaluates both live Account passbook ledgers (4 factors) and manual user forms (profile + banking inputs).
+ * 4. Dual Compatibility: Evaluates both live account ledgers (4 factors) and manual user forms (profile + banking inputs).
  * 
  * Syllabus Mapping:
  * - Programming Fundamentals: Control flow (if-else, switch, loops), operators, type conversion, arrays/lists.
@@ -50,7 +50,7 @@ public class ScoreIQ {
     }
 
     /**
-     * Banking parameters extracted from passbook or entered manually.
+     * Banking parameters extracted from account activity or entered manually.
      */
     public static class BankData {
         public double avgMonthlyBalance = 5000.0;
@@ -209,7 +209,7 @@ public class ScoreIQ {
     }
 
     /**
-     * Primary Score calculation based on active Account passbook ledger.
+     * Primary Score calculation based on active account ledger.
      * Evaluates 4 transparent factors (25% weight each) mapped to CIBIL-like range (300 to 900).
      */
     public static ScoreResult calculate(Account account) {
@@ -339,11 +339,11 @@ public class ScoreIQ {
             tips.add("Retain at least 20% of deposited funds as a liquid savings buffer.");
         }
         if (totalTx < 4) {
-            tips.add("Increase digital transaction frequency: active passbooks reflect genuine financial vitality.");
+            tips.add("Increase digital transaction frequency to build a stronger account history.");
         }
         if (tips.isEmpty()) {
             tips.add("Maintain consistent monthly inflows and healthy savings to keep your score in the top tier.");
-            tips.add("Keep digital UPI and merchant payouts routed through your passbook.");
+            tips.add("Keep digital UPI and merchant payouts routed through your account.");
         }
 
         // Echoed user profile
@@ -407,12 +407,12 @@ public class ScoreIQ {
                 : String.format(Locale.US, "%d missed payments in past 12 months penalized discipline score.", user.missedPaymentsLast12m)
         ));
 
-        // 4. Passbook Reserve & Balance
+        // 4. Account Reserve & Balance
         double bal = bank.avgMonthlyBalance;
         int ptsBalance = (int) Math.round(Math.min(100.0, Math.max(25.0, (bal / 20000.0) * 85.0)));
         if (bank.bounceCount6m > 0) ptsBalance = Math.max(10, ptsBalance - (bank.bounceCount6m * 20));
         breakdown.add(new Factor(
-            "Passbook Liquidity", ptsBalance, 0.20,
+            "Account Liquidity", ptsBalance, 0.20,
             String.format(Locale.US, "Maintains ₹%,.2f average liquid buffer (%d bounces recorded).",
                 bal, bank.bounceCount6m)
         ));

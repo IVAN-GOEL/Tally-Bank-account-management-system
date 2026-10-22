@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Main.java - Interactive Console Passbook Banking System
+ * Main.java - Interactive Console Tally Banking System
  * 
  * Perfect for College Lab Presentations, Practical Exams & Viva Demonstrations.
  * Implements and maps to all major units of the Object-Oriented Programming (OOP) syllabus:
@@ -32,7 +32,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("==================================================================");
-        System.out.println("     PassBook: Bank Account Management System (Java OOP Demo)    ");
+        System.out.println("        Tally: Bank Account Management System (Java OOP)         ");
         System.out.println("            Featuring ScoreIQ Alternative Credit Scoring          ");
         System.out.println("==================================================================");
 
@@ -77,7 +77,7 @@ public class Main {
                 case "11": reviewExternalStatement(); break;
                 case "12": printOOPSyllabusMap(); break;
                 case "13":
-                    System.out.println("\nThank you for using PassBook. Exiting system.");
+                    System.out.println("\nThank you for using Tally. Exiting system.");
                     running = false;
                     break;
                 default:
@@ -102,10 +102,10 @@ public class Main {
         System.out.println(" 4. Withdraw Funds                [Subclass Overridden withdraw()]");
         System.out.println(" 5. Transfer to Another Account   [Objects as Parameters & Arrays]");
         System.out.println(" 6. Run Month-End Settlement      [Polymorphic monthEnd()]");
-        System.out.println(" 7. Print Passbook Statement      [Account.getTransactions()]");
+        System.out.println(" 7. Print Account Statement       [Account.getTransactions()]");
         System.out.println(" 8. Export Statement to File      [I/O Basics: File Handling]");
         System.out.println(" 9. Recursive Interest Calculator [Recursion in Methods]");
-        System.out.println("10. ScoreIQ Credit Scoring        [Active Passbook Analysis]");
+        System.out.println("10. ScoreIQ Credit Scoring        [Active Account Analysis]");
         System.out.println("11. Review External Statement     [ScoreIQ.reviewStatement()]");
         System.out.println("12. Display Full OOP Syllabus Map [Viva Reference & Architecture]");
         System.out.println("13. Exit System");
@@ -164,12 +164,12 @@ public class Main {
 
         accounts.add(newAcc);
         activeAccount = newAcc;
-        System.out.printf("Success: Passbook issued! Account No: %s | Holder: %s\n",
+        System.out.printf("Success: Account created! Account No: %s | Holder: %s\n",
             newAcc.getAccountNumber(), newAcc.getHolder());
     }
 
     private static void listAndSwitchAccount() {
-        System.out.println("\n--- REGISTERED PASSBOOK ACCOUNTS ---");
+        System.out.println("\n--- REGISTERED ACCOUNTS ---");
         for (int i = 0; i < accounts.size(); i++) {
             Account a = accounts.get(i);
             System.out.printf(" [%d] %s (%s) - %s | Balance: ₹%,.2f\n",
@@ -317,7 +317,7 @@ public class Main {
     private static void printStatement() {
         if (activeAccount == null) return;
         System.out.println("\n==================================================================");
-        System.out.printf("        PASSBOOK STATEMENT: %s [%s]\n", activeAccount.getHolder().toUpperCase(), activeAccount.getAccountNumber());
+        System.out.printf("        TALLY ACCOUNT STATEMENT: %s [%s]\n", activeAccount.getHolder().toUpperCase(), activeAccount.getAccountNumber());
         System.out.printf("        Account Type: %s | Current Balance: ₹%,.2f\n", activeAccount.getAccountType(), activeAccount.getBalance());
         System.out.println("==================================================================");
         System.out.printf(" %-16s | %-12s | %10s | %11s | %s\n", "Date", "Type", "Amount (₹)", "Balance (₹)", "Narration");
@@ -348,7 +348,7 @@ public class Main {
     private static void exportStatementFile() {
         if (activeAccount == null) return;
         String fileName = "statement_" + activeAccount.getAccountNumber() + ".txt";
-        System.out.printf("\nExporting passbook ledger to file: %s ...\n", fileName);
+        System.out.printf("\nExporting account ledger to file: %s ...\n", fileName);
 
         try {
             // I/O File Handling: Writing to file

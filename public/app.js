@@ -1,9 +1,9 @@
 /**
- * app.js - PassBook & ScoreIQ Client Logic
+ * app.js - Tally & ScoreIQ Client Logic
  * 
  * Clean Sidebar Architecture:
  * - Zero hardcoded demo accounts or fake placeholders.
- * - Single view rendered at a time (Passbook, ScoreIQ, Create, OOP Inspector).
+ * - Single view rendered at a time (Account Ledger, ScoreIQ, Create, OOP Inspector).
  * - Full account state managed in localStorage and synchronized with /api.
  * - Indian currency formatting (en-IN) and zero emojis.
  */
@@ -153,9 +153,9 @@ function updateActiveAccountDetails() {
   // Account description
   const descEl = document.getElementById("active-description");
   if (isSavings) {
-    descEl.innerHTML = `<strong>SavingsAccount:</strong> Capital growth passbook with <strong>3.5% p.a.</strong> monthly interest, <strong>₹500.00</strong> minimum balance requirement, and max <strong>5 withdrawals/month</strong>.`;
+    descEl.innerHTML = `<strong>SavingsAccount:</strong> Capital growth account with <strong>3.5% p.a.</strong> monthly interest, <strong>₹500.00</strong> minimum balance requirement, and max <strong>5 withdrawals/month</strong>.`;
   } else {
-    descEl.innerHTML = `<strong>CurrentAccount:</strong> Commercial business passbook with <strong>₹10,000.00</strong> overdraft protection and flat <strong>₹100.00/month</strong> maintenance fee.`;
+    descEl.innerHTML = `<strong>CurrentAccount:</strong> Commercial business account with <strong>₹10,000.00</strong> overdraft protection and flat <strong>₹100.00/month</strong> maintenance fee.`;
   }
 
   // Withdrawal hint
@@ -251,7 +251,7 @@ async function handleCreateAccount(e) {
     showMethodBanner(`Ran ${data.method_used}`, data.message);
     document.getElementById("form-create-account").reset();
 
-    // Switch view to Passbook
+    // Switch view to account ledger
     switchView("view-passbook");
   } catch (err) {
     showError(err.message);
@@ -468,7 +468,7 @@ async function fetchScoreIQ() {
 
 function handleAutoFillPassbook() {
   if (!activeAccount) {
-    showError("Please create or select an active passbook account first to auto-fill metrics.");
+    showError("Please create or select an active account first to auto-fill metrics.");
     return;
   }
 
@@ -520,7 +520,7 @@ function handleAutoFillPassbook() {
   const salarySelect = document.getElementById("siq-salary");
   if (salarySelect) salarySelect.value = salaryFound ? "true" : "false";
 
-  showMethodBanner("Auto-filled PassBook Metrics", `Imported metrics for ${activeAccount.holder} (${activeAccount.account_number}).`);
+  showMethodBanner("Auto-filled Tally metrics", `Imported metrics for ${activeAccount.holder} (${activeAccount.account_number}).`);
 
   // Recalculate score automatically
   fetchScoreIQ();
@@ -833,27 +833,29 @@ function renderOOPTree() {
     const isActiveClass = lastExecutedMethod && lastExecutedMethod.startsWith(cls.name);
 
     return `
-      <div class="class-card ${isSubclass ? 'subclass' : ''} ${isActiveClass ? 'active-execution' : ''}">
-        <div class="class-header">
+      <details class="class-card ${isSubclass ? 'subclass' : ''} ${isActiveClass ? 'active-execution' : ''}">
+        <summary class="class-header">
           <span class="class-name">class ${cls.name}</span>
-          <span class="class-parent">${cls.parent !== 'object' ? `extends ${cls.parent}` : 'Base Object'}</span>
-        </div>
-        <p class="class-doc">${cls.doc}</p>
-        <span class="class-methods-title">Methods Defined:</span>
-        <div class="methods-tag-list">
-          ${cls.methods.map(m => {
-            const isOverridden = cls.overrides && cls.overrides.includes(m);
-            const isExecuting = lastExecutedMethod && lastExecutedMethod.includes(`${cls.name}.${m}`);
-            let extraClass = "";
-            if (isExecuting) extraClass = "active-method";
-            else if (isOverridden) extraClass = "overridden";
+          <span class="class-parent">${cls.parent !== 'object' ? `extends ${cls.parent}` : 'Base class'}</span>
+        </summary>
+        <div class="class-inspector-details">
+          <p class="class-doc">${cls.doc}</p>
+          <span class="class-methods-title">Methods</span>
+          <div class="methods-tag-list">
+            ${cls.methods.map(m => {
+              const isOverridden = cls.overrides && cls.overrides.includes(m);
+              const isExecuting = lastExecutedMethod && lastExecutedMethod.includes(`${cls.name}.${m}`);
+              let extraClass = "";
+              if (isExecuting) extraClass = "active-method";
+              else if (isOverridden) extraClass = "overridden";
 
-            return `<span class="method-tag ${extraClass}">
-              ${m}() ${isOverridden ? '[override]' : ''}
-            </span>`;
-          }).join('')}
+              return `<span class="method-tag ${extraClass}">
+                ${m}() ${isOverridden ? '[override]' : ''}
+              </span>`;
+            }).join('')}
+          </div>
         </div>
-      </div>
+      </details>
     `;
   }).join('');
 }
@@ -941,7 +943,7 @@ function handleDownloadPDF() {
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
-    doc.text("PASSBOOK — CORE OOP BANK", 40, 32);
+    doc.text("TALLY — ACCOUNT LEDGER", 40, 32);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8.5);
@@ -1047,13 +1049,13 @@ function handleDownloadPDF() {
     doc.setFontSize(7.5);
     doc.setTextColor(110, 105, 95);
     doc.text(
-      "This official passbook statement is computer-generated by PassBook Banking Engine and adheres to pure Java OOP standards.",
+      "This account statement is generated by Tally Banking Engine and adheres to pure Java OOP standards.",
       40,
       Math.min(finalY, 800)
     );
 
     // Trigger Save
-    const filename = `PassBook_Statement_${activeAccount.account_number}.pdf`;
+    const filename = `Tally_Statement_${activeAccount.account_number}.pdf`;
     doc.save(filename);
   } catch (err) {
     console.error("PDF generation error:", err);
@@ -1074,83 +1076,62 @@ function hideError() {
 }
 
 // ============================================================================
-// 7. LIVE OOP TEST BENCH & SYLLABUS FILTERS
+// 7. LIVE OOP TEST BENCH
 // ============================================================================
 
-function logToTestBench(title, syllabusUnit, codeSnippet, resultOutput, isError = false) {
+function logToTestBench(title, resultOutput, isError = false) {
   const logEl = document.getElementById("testbench-log");
   if (!logEl) return;
 
   const timestamp = new Date().toLocaleTimeString("en-IN", { hour12: false });
-  const entry = `[${timestamp}] [${syllabusUnit}] ${title}\n` +
-    `------------------------------------------------------------\n` +
-    `CODE:   ${codeSnippet}\n` +
-    `STATUS: ${isError ? 'EXCEPTION CAUGHT / INVARIANT ENFORCED' : 'SUCCESS / VALIDATED'}\n` +
-    `OUTPUT: ${resultOutput}\n\n`;
+  const entry = `[${timestamp}] ${title}\n` +
+    `${isError ? "BLOCKED" : "PASSED"}: ${resultOutput}\n\n`;
 
   logEl.textContent = entry + logEl.textContent;
+  const outputDetails = document.getElementById("testbench-output-details");
+  if (outputDetails) outputDetails.open = true;
   showMethodBanner(title, resultOutput);
 }
 
 function handleTestMinBalance() {
   logToTestBench(
-    "Unit 6 Exception Handling: Minimum Balance Invariant",
-    "UNIT 6",
-    "savingsAccount.withdraw(amount) throws MinimumBalanceException",
-    "Attempted withdrawal of ₹10,000 on SavingsAccount (Balance: ₹5,200.00).\n" +
-    "JVM Caught: MinimumBalanceException: Savings account requires minimum balance of ₹500.00 to remain in force.\n" +
-    "Invariant Preserved: Transaction aborted without debiting encapsulated balance field.",
+    "Minimum balance rule",
+    "Withdrawal blocked; the ₹500 minimum balance is preserved.",
     true
   );
 }
 
 function handleTestOverdraft() {
   logToTestBench(
-    "Unit 5 Method Overriding: Current Account Overdraft",
-    "UNIT 5",
-    "@Override public Transaction withdraw(double amount) throws BankException // CurrentAccount.java",
-    "Executed currentAccount.withdraw(₹14,500.00) on initial balance of ₹5,000.00.\n" +
-    "Overdraft Permitted: New Balance is -₹9,500.00 (within ₹10,000.00 commercial limit).\n" +
-    "Subsequent test of ₹1,000: InsufficientFundsException: Overdraft limit breached (max ₹10,000 allowed).",
-    false
+    "Overdraft limit",
+    "₹14,500 withdrawal allowed to -₹9,500; the ₹10,000 limit blocks more."
   );
 }
 
 function handleTestRecursion() {
-  let trace = "Recursion Call Stack:\n";
   let p = 10000.0, r = 0.05, n = 4;
-  function recComp(principal, rate, cycles, step = 1) {
-    trace += `  frame[${step}]: cycle=${cycles}, principal=₹${principal.toFixed(2)}\n`;
+  function recComp(principal, rate, cycles) {
     if (cycles <= 0) return principal;
-    return recComp(principal * (1.0 + rate), rate, cycles - 1, step + 1);
+    return recComp(principal * (1.0 + rate), rate, cycles - 1);
   }
   let finalVal = recComp(p, r, n);
-  trace += `  return value after ${n} frames: ₹${finalVal.toFixed(2)}`;
 
   logToTestBench(
-    "Unit 3 Classes & Methods: Recursive Compound Interest",
-    "UNIT 3",
-    "Account.calculateCompoundInterestRecursively(10000.0, 0.05, 4)",
-    trace,
-    false
+    "Recursive interest",
+    `4 recursive steps grow ₹10,000 to ₹${finalVal.toFixed(2)} at 5%.`
   );
 }
 
 function handleTestMultilevel() {
   logToTestBench(
-    "Unit 5 Inheritance: 4-Tier Multilevel Hierarchy",
-    "UNIT 5",
-    "BankEntity -> Account -> SavingsAccount -> SeniorCitizenSavingsAccount",
-    "Dispatched SeniorCitizenSavingsAccount.monthEnd().\n" +
-    "Preferential Rate Applied: 4.25% p.a. (higher than standard 3.50% SavingsAccount rate).\n" +
-    "Polymorphic Dynamic Dispatch: JVM resolved child class implementation via invokevirtual bytecode.",
-    false
+    "Senior account interest",
+    "Senior accounts earn 4.25% p.a. (standard savings: 3.5%)."
   );
 }
 
 function handleTestFileIO() {
   const content = "========================================================\n" +
-    "PASSBOOK STATEMENT EXPORT (Unit 4: File Handling)\n" +
+    "TALLY ACCOUNT STATEMENT\n" +
     "Generated via java.io.PrintWriter & java.io.FileWriter\n" +
     "========================================================\n" +
     "Account Holder: Rohan Kumar\n" +
@@ -1164,39 +1145,21 @@ function handleTestFileIO() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "passbook_statement_export.txt";
+  a.download = "tally_statement_export.txt";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
   logToTestBench(
-    "Unit 4 I/O Basics: File Handling & Stream Writers",
-    "UNIT 4",
-    "Account.exportStatementToFile(\"statement.txt\") using PrintWriter & FileWriter",
-    "Exported official passbook statement to passbook_statement_export.txt.\n" +
-    "Streams closed automatically via Java try-with-resources statement.",
-    false
+    "Ledger export",
+    "Sample statement exported to tally_statement_export.txt."
   );
 }
 
 function handleClearTestBench() {
   const logEl = document.getElementById("testbench-log");
-  if (logEl) logEl.textContent = "Console cleared. Click any test above to execute live Java OOP logic.";
-}
-
-function handleFilterSyllabus(unitId) {
-  document.querySelectorAll(".syllabus-chip").forEach(chip => {
-    chip.classList.toggle("active", chip.dataset.unit === unitId);
-  });
-
-  document.querySelectorAll(".principle-card").forEach(card => {
-    if (unitId === "all") {
-      card.classList.remove("hidden");
-    } else {
-      card.classList.toggle("hidden", card.dataset.unit !== unitId);
-    }
-  });
+  if (logEl) logEl.textContent = "Output cleared.";
 }
 
 // ============================================================================
@@ -1301,7 +1264,7 @@ function setupEventListeners() {
     });
   }
 
-  // ScoreIQ Autofill from Active Passbook
+  // ScoreIQ autofill from the active account
   const btnAutoFill = document.getElementById("btn-autofill-passbook");
   if (btnAutoFill) {
     btnAutoFill.addEventListener("click", handleAutoFillPassbook);
@@ -1325,11 +1288,6 @@ function setupEventListeners() {
 
   const btnClearConsole = document.getElementById("btn-clear-console");
   if (btnClearConsole) btnClearConsole.addEventListener("click", handleClearTestBench);
-
-  // Syllabus Unit Filter Chips
-  document.querySelectorAll(".syllabus-chip").forEach(chip => {
-    chip.addEventListener("click", () => handleFilterSyllabus(chip.dataset.unit));
-  });
 
   // Statement PDF Download
   const btnDownloadPdf = document.getElementById("btn-download-pdf");

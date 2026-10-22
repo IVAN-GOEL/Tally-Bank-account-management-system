@@ -1,8 +1,8 @@
-# PassBook: Bank Account Management System & ScoreIQ (Java OOP)
+# Tally: Bank Account Management System & ScoreIQ (Java OOP)
 
 > *"A small bank, built from classes — aligned directly with the College OOP Syllabus."*
 
-PassBook is an educational **Object-Oriented Programming (OOP) mini-project** built in **pure, beginner-readable Java** for college computer science coursework, laboratory evaluations, and viva voce examinations. It models a commercial bank passbook ledger while demonstrating all core curriculum topics: **Class Fundamentals, Object Reference Variables, Method & Constructor Overloading, Objects as Parameters, Recursion, Static Nested & Inner Classes, Console & File I/O, Multilevel Inheritance, Abstract Classes, Method Overriding, Custom Exception Hierarchies, and ScoreIQ Alternative Credit Scoring**.
+Tally is an educational **Object-Oriented Programming (OOP) mini-project** built in **pure, beginner-readable Java** for college computer science coursework, laboratory evaluations, and viva voce examinations. It models a commercial bank account ledger while demonstrating all core curriculum topics: **Class Fundamentals, Object Reference Variables, Method & Constructor Overloading, Objects as Parameters, Recursion, Static Nested & Inner Classes, Console & File I/O, Multilevel Inheritance, Abstract Classes, Method Overriding, Custom Exception Hierarchies, and ScoreIQ Alternative Credit Scoring**.
 
 ---
 
@@ -79,7 +79,7 @@ classDiagram
     Account <|-- CurrentAccount : Derived Class (Inheritance)
 ```
 
-| Syllabus Topic | Concepts Covered | Implementation in PassBook | Source File |
+| Syllabus Topic | Concepts Covered | Implementation in Tally | Source File |
 | :--- | :--- | :--- | :--- |
 | **1. History & Evolution of OOP** | Benefits of OOP (Modularity, Data Hiding, Reusability, Extensibility); Applications in enterprise systems; Java vs C++ vs C# architecture (JVM Bytecode, Garbage Collection, pointer safety, single class inheritance). | Explains benefits via encapsulated bank balances and transaction logging; abstract class `BankEntity` enforces core contracts. | [`src/BankEntity.java`](src/BankEntity.java) |
 | **2. Programming Fundamentals** | Control flow statements (`if-else`, `switch-case`, `while`, `for-each`); Operators; Datatypes (primitive `double`, `int`, `boolean` vs reference types); Type conversion & explicit narrowing casts `(int) Math.round()`; Wrapper classes (`Double.valueOf()`, `Integer.parseInt()`); Arrays (`Transaction[]`). | Menu control in `Main.java`, transaction routing in `BankServer.java`, array returns in `transfer()`. | [`src/Main.java`](src/Main.java), [`src/Account.java`](src/Account.java) |
@@ -87,7 +87,7 @@ classDiagram
 | **4. I/O Basics** | Reading Console Input (`Scanner`); Writing Console Output (`System.out.printf`); File Handling (`FileWriter`, `PrintWriter`, `FileReader`, `BufferedReader`). | Console interface in `Main.java`; File export and readback methods `exportStatementToFile()` and `readStatementFile()`. | [`src/Main.java`](src/Main.java), [`src/Account.java`](src/Account.java) |
 | **5. Inheritance** | Base and derived classes; Multilevel hierarchy (`BankEntity` -> `Account` -> `SavingsAccount` -> `SeniorCitizenSavingsAccount`); Access modifiers in inheritance (`protected` fields); Method overriding (`@Override` on `withdraw()`, `monthEnd()`, `describe()`); Abstract classes (`BankEntity`). | Subclass-specific banking rules; senior citizen preferential 4.25% interest rate. | [`src/Account.java`](src/Account.java), [`src/SavingsAccount.java`](src/SavingsAccount.java), [`src/SeniorCitizenSavingsAccount.java`](src/SeniorCitizenSavingsAccount.java), [`src/CurrentAccount.java`](src/CurrentAccount.java) |
 | **6. Exception Handling** | Exception types (Checked vs Unchecked); Creating custom exceptions; Exception hierarchy (`BankException extends Exception`); `try`, `catch`, `finally`, `throw`, `throws`. | Domain errors: `InsufficientFundsException`, `MinimumBalanceException`, `WithdrawalLimitExceededException`, `InvalidAmountException`. | [`src/BankException.java`](src/BankException.java) & exception classes |
-| **7. Side Feature: ScoreIQ** | Deterministic, transparent alternative credit score (300 to 900) based on passbook cash flow discipline without requiring loan debt history. | Evaluates Transaction Activity, Regularity, Savings Habit, Stability, and UPI velocity. | [`src/ScoreIQ.java`](src/ScoreIQ.java) |
+| **7. Side Feature: ScoreIQ** | Deterministic, transparent alternative credit score (300 to 900) based on account cash-flow discipline without requiring loan debt history. | Evaluates Transaction Activity, Regularity, Savings Habit, Stability, and UPI velocity. | [`src/ScoreIQ.java`](src/ScoreIQ.java) |
 
 ---
 
@@ -158,7 +158,7 @@ java -cp bin TestPassBook
 Expected output:
 ```
 ==================================================================
-       PassBook Java OOP Test Suite (23 Verification Scenarios)    
+          Tally Java OOP Test Suite (23 Verification Scenarios)
 ==================================================================
  [PASS] ... (all scenarios)
 --- Testing Syllabus Concepts (Inheritance, Abstraction, Recursion, I/O) ---

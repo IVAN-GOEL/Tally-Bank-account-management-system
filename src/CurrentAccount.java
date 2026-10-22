@@ -66,7 +66,7 @@ public class CurrentAccount extends Account {
             "FEE",
             MONTHLY_MAINTENANCE_FEE,
             this.balance,
-            "Monthly Passbook & Ledger Maintenance Fee (₹100)"
+            "Monthly Tally account maintenance fee (₹100)"
         );
         this.transactions.add(tx);
         return tx;

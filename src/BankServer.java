@@ -67,7 +67,7 @@ public class BankServer {
 
         server.setExecutor(null); // Default executor
         System.out.println("==================================================================");
-        System.out.println("  PassBook Java Server Started successfully!");
+        System.out.println("  Tally Java Server Started successfully!");
         System.out.println("  Open your browser and navigate to: http://localhost:" + activePort + "/");
         System.out.println("  Serving Web UI from '" + STATIC_DIR + "/' directory.");
         System.out.println("  Press Ctrl + C in terminal to stop server.");

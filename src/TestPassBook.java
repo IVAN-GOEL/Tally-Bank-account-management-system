@@ -1,5 +1,5 @@
 /**
- * TestPassBook.java - Standalone Java OOP Test Suite
+ * TestPassBook.java - Standalone Tally OOP Test Suite
  * 
  * Verifies all 23 unit test scenarios without needing external JUnit jars.
  * Can be run anywhere: javac src/*.java && java -cp src TestPassBook
@@ -10,7 +10,7 @@ public class TestPassBook {
 
     public static void main(String[] args) {
         System.out.println("==================================================================");
-        System.out.println("       PassBook Java OOP Test Suite (23 Verification Scenarios)    ");
+        System.out.println("          Tally Java OOP Test Suite (23 Verification Scenarios)    ");
         System.out.println("==================================================================");
 
         testTransaction();
@@ -263,7 +263,7 @@ public class TestPassBook {
         try {
             senior.exportStatementToFile(tempFile);
             String content = Account.readStatementFile(tempFile);
-            assertTrue(content.contains("PASSBOOK OFFICIAL ACCOUNT STATEMENT"), "exportStatementToFile writes header");
+            assertTrue(content.contains("TALLY ACCOUNT STATEMENT"), "exportStatementToFile writes header");
             assertTrue(content.contains("Dada Ji"), "exportStatementToFile contains holder name");
             new java.io.File(tempFile).delete(); // Clean up scratch test file
         } catch (Exception e) {

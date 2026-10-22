@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PassBook — Bank Account Management &amp; ScoreIQ</title>
+  <title>Tally — Bank Account Management &amp; ScoreIQ</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -33,7 +33,7 @@
           </svg>
         </div>
         <div class="brand-text">
-          <span class="brand-title">PassBook</span>
+          <span class="brand-title">Tally</span>
           <span class="brand-sub">Core OOP Bank</span>
         </div>
       </div>
@@ -49,7 +49,7 @@
             <line x1="8" y1="6" x2="16" y2="6"/>
             <line x1="8" y1="10" x2="14" y2="10"/>
           </svg>
-          <span class="nav-text">Passbook &amp; Ledger</span>
+          <span class="nav-text">Accounts &amp; Ledger</span>
         </button>
 
         <button class="nav-item" data-view="view-scoreiq" id="nav-scoreiq">
@@ -154,7 +154,7 @@
 
           <div class="passbook-slip-header">
             <div class="slip-left">
-              <span class="slip-bank-mark">PASSBOOK SLIP • CORE OOP BANK</span>
+              <span class="slip-bank-mark">TALLY • ACCOUNT LEDGER</span>
               <h2 class="slip-holder" id="active-holder">—</h2>
               <div class="slip-meta-grid">
                 <div>
@@ -311,7 +311,7 @@
                 <h3 class="statement-title">Statement of Transactions</h3>
                 <span class="statement-count" id="statement-count">0 entries</span>
               </div>
-              <button type="button" id="btn-download-pdf" class="btn btn-secondary btn-sm" title="Download official passbook statement as PDF">
+              <button type="button" id="btn-download-pdf" class="btn btn-secondary btn-sm" title="Download account statement as PDF">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                   <polyline points="7 10 12 15 17 10"/>
@@ -354,16 +354,16 @@
               <div class="scoreiq-tag">ALTERNATIVE CREDIT SCORING ENGINE</div>
               <h2 class="scoreiq-title">ScoreIQ: Credit Score Without Loan History</h2>
               <p class="scoreiq-sub">
-                Deterministic, rule-based scoring engine evaluating real-world cash-flow discipline, employment stability, and passbook velocity.
+                Deterministic, rule-based scoring engine evaluating real-world cash-flow discipline, employment stability, and account activity.
               </p>
             </div>
             <div class="scoreiq-header-actions">
-              <button type="button" id="btn-autofill-passbook" class="btn btn-secondary btn-sm" title="Pull metrics from your active Passbook ledger">
+              <button type="button" id="btn-autofill-passbook" class="btn btn-secondary btn-sm" title="Pull metrics from your active account ledger">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
                   <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
                 </svg>
-                <span>Auto-fill from Passbook</span>
+                <span>Auto-fill from Ledger</span>
               </button>
             </div>
           </div>
@@ -628,11 +628,11 @@
                   </div>
                 </div>
 
-                <!-- Column 3: Passbook Liquidity -->
+                <!-- Column 3: Account Liquidity -->
                 <div class="scoreiq-section-box">
                   <div class="section-box-header">
                     <span class="section-box-tag mono">STEP 3</span>
-                    <h3 class="section-box-title">Passbook Liquidity</h3>
+                    <h3 class="section-box-title">Account Liquidity</h3>
                   </div>
                   <div class="form-group">
                     <label class="form-label" for="siq-balance">Avg Bank Balance (₹)</label>
@@ -697,7 +697,7 @@
                     <span class="top-driver-label">PRIMARY SCORE DRIVER</span>
                     <div class="top-driver-val" id="scoreiq-top-driver">Awaiting calculation</div>
                     <p class="scoreiq-explanation" id="scoreiq-explanation">
-                      Fill out applicant metrics or click "Auto-fill from Passbook" and calculate to generate your score breakdown.
+                      Fill out applicant metrics or click "Auto-fill from Ledger" and calculate to generate your score breakdown.
                     </p>
                   </div>
 
@@ -746,7 +746,7 @@
                 <div class="comp-badge scoreiq-badge">SCOREIQ ALTERNATIVE MODEL</div>
                 <h3 class="comp-heading">Cash-Flow &amp; Discipline Based</h3>
                 <ul class="comp-list">
-                  <li>Scores real-time passbook inflows and transaction velocity.</li>
+                  <li>Scores real-time account inflows and transaction velocity.</li>
                   <li>Rewards regular deposits and positive savings retention.</li>
                   <li>Penalizes overdraft stress and liquid distress transparently.</li>
                   <li>100% deterministic, rule-based arithmetic with zero black-box ML.</li>
@@ -767,7 +767,7 @@
             <h2 class="card-title">Open New Bank Account</h2>
             <span class="card-number">FORM 01-A</span>
           </div>
-          <p class="card-subtext">Choose an account classification and enter holder details to issue a new passbook.</p>
+          <p class="card-subtext">Choose an account type and enter holder details to open an account.</p>
 
           <form id="form-create-account" class="ledger-form">
             <div class="form-group">
@@ -806,14 +806,14 @@
             </div>
 
             <button type="submit" id="btn-create-submit" class="btn btn-primary">
-              Issue Passbook
+              Create Account
             </button>
           </form>
         </article>
       </section>
 
       <!-- ============================================================ -->
-      <!-- VIEW 4: UNDER THE HOOD (COMPREHENSIVE OOP INSPECTOR) -->
+      <!-- VIEW 4: UNDER THE HOOD -->
       <!-- ============================================================ -->
       <section id="view-oop" class="view-panel">
 
@@ -821,20 +821,20 @@
         <article class="ledger-card live-dispatch-card">
           <div class="card-head">
             <div>
-              <span class="card-number">RUNTIME METHOD DISPATCH</span>
-              <h2 class="card-title">Live Polymorphism &amp; Method Execution Trace</h2>
+              <span class="card-number">LIVE ACTIVITY</span>
+              <h2 class="card-title">What just ran</h2>
             </div>
-            <div class="status-indicator-tag">ACTIVE RUNTIME TRACE</div>
+            <div class="status-indicator-tag">LIVE TRACE</div>
           </div>
           <div class="dispatch-trace-content">
             <div class="dispatch-col">
-              <span class="dispatch-meta-label">LAST EXECUTED METHOD</span>
-              <span class="dispatch-code-val mono" id="trace-method-name">Account initialized (No calls yet)</span>
+              <span class="dispatch-meta-label">METHOD</span>
+              <span class="dispatch-code-val mono" id="trace-method-name">No activity yet</span>
             </div>
             <div class="dispatch-col">
-              <span class="dispatch-meta-label">POLYMORPHIC RESOLUTION</span>
+              <span class="dispatch-meta-label">RESULT</span>
               <span class="dispatch-desc-val" id="trace-resolution-desc">
-                When an action runs, dynamic dispatch resolves whether the base or overridden method executes in Java.
+                Run a transaction or demo to see which account method handles it.
               </span>
             </div>
           </div>
@@ -844,179 +844,52 @@
         <article class="ledger-card live-testbench-card">
           <div class="card-head">
             <div>
-              <span class="card-number">INTERACTIVE TEST BENCH</span>
-              <h2 class="card-title">Live Java OOP Invariant &amp; Method Execution Simulator</h2>
+              <span class="card-number">QUICK DEMOS</span>
+              <h2 class="card-title">See it in action</h2>
             </div>
-            <span class="code-compare-badge mono">Lab Viva &amp; Demonstration Bench</span>
           </div>
-          <p class="card-subtext">
-            Execute real-time test cases to verify OOP syllabus principles live. Watch polymorphic dispatch, custom exception catching, recursive calculations, and file handling in action.
-          </p>
 
           <div class="testbench-actions-grid">
             <button type="button" class="btn-testbench" id="btn-test-min-balance">
-              <span class="testbench-badge mono">UNIT 6: EXCEPTION</span>
-              <strong>1. Test Minimum Balance Invariant</strong>
-              <small>Attempts withdrawal breaching ₹500 floor to trigger MinimumBalanceException</small>
+              <strong>Minimum balance</strong>
             </button>
             <button type="button" class="btn-testbench" id="btn-test-overdraft">
-              <span class="testbench-badge mono">UNIT 5: OVERRIDING</span>
-              <strong>2. Test Current A/C Overdraft Limit</strong>
-              <small>Executes CurrentAccount.withdraw() down to -₹10,000 negative liquidity limit</small>
+              <strong>Current account overdraft</strong>
             </button>
             <button type="button" class="btn-testbench" id="btn-test-recursion">
-              <span class="testbench-badge mono">UNIT 3: RECURSION</span>
-              <strong>3. Test Recursive Compound Interest</strong>
-              <small>Executes Account.calculateCompoundInterestRecursively() across 12 compounding cycles</small>
+              <strong>Compound interest</strong>
             </button>
             <button type="button" class="btn-testbench" id="btn-test-multilevel">
-              <span class="testbench-badge mono">UNIT 5: MULTILEVEL</span>
-              <strong>4. Test 4-Tier Senior Citizen Hierarchy</strong>
-              <small>Dispatches SeniorCitizenSavingsAccount.monthEnd() at 4.25% preferential rate</small>
+              <strong>Senior account rate</strong>
             </button>
             <button type="button" class="btn-testbench" id="btn-test-file-io">
-              <span class="testbench-badge mono">UNIT 4: FILE I/O</span>
-              <strong>5. Test Ledger File Export (FileWriter)</strong>
-              <small>Simulates exportStatementToFile() formatting text ledger records</small>
+              <strong>Export a sample ledger</strong>
             </button>
           </div>
 
           <!-- Test Bench Live Output Console -->
-          <div class="testbench-console-box" id="testbench-console">
+          <details class="testbench-output-details" id="testbench-output-details">
+            <summary>Demo output</summary>
+            <div class="testbench-console-box" id="testbench-console">
             <div class="console-header">
-              <span class="console-title mono">JVM EXECUTION TRACE &amp; SYLLABUS VERIFICATION LOG</span>
+              <span class="console-title mono">DEMO OUTPUT</span>
               <button type="button" class="btn-console-clear mono" id="btn-clear-console">Clear Console</button>
             </div>
-            <pre class="console-output mono" id="testbench-log">Ready. Click any test above to execute live Java OOP logic.</pre>
+            <pre class="console-output mono" id="testbench-log">Run a demo to see its result.</pre>
+            </div>
+          </details>
           </div>
         </article>
-
-        <!-- Complete College OOP Course Syllabus Mapping (Units 1-6) -->
-        <article class="ledger-card syllabus-intro-card">
-          <div class="card-head">
-            <div>
-              <span class="card-number">COLLEGE OOP SYLLABUS DIRECTORY</span>
-              <h2 class="card-title">Java Object-Oriented Programming Course Mapping</h2>
-            </div>
-            <span class="code-compare-badge mono">Units 1 - 6 Comprehensive Reference</span>
-          </div>
-          <p class="card-subtext">
-            Every core module from your academic OOP syllabus is implemented cleanly across the PassBook Java codebase.
-            Refer to these modules during lab evaluations and viva voce demonstrations.
-          </p>
-
-          <!-- Syllabus Unit Filter Tabs -->
-          <div class="syllabus-filter-bar">
-            <span class="filter-label mono">FILTER SYLLABUS:</span>
-            <div class="filter-chips-list">
-              <button type="button" class="syllabus-chip active" data-unit="all">All Units (1-6)</button>
-              <button type="button" class="syllabus-chip" data-unit="1">Unit 1: Evolution</button>
-              <button type="button" class="syllabus-chip" data-unit="2">Unit 2: Fundamentals</button>
-              <button type="button" class="syllabus-chip" data-unit="3">Unit 3: Classes &amp; Recursion</button>
-              <button type="button" class="syllabus-chip" data-unit="4">Unit 4: Console &amp; File I/O</button>
-              <button type="button" class="syllabus-chip" data-unit="5">Unit 5: Multilevel &amp; Abstract</button>
-              <button type="button" class="syllabus-chip" data-unit="6">Unit 6: Custom Exceptions</button>
-            </div>
-          </div>
-        </article>
-
-        <div class="oop-principles-grid" id="principles-grid">
-          <!-- Unit 1 -->
-          <div class="principle-card" data-unit="1">
-            <div class="principle-header">
-              <span class="principle-badge">UNIT 1: OOP EVOLUTION</span>
-              <span class="principle-file mono">BankEntity.java</span>
-            </div>
-            <h3 class="principle-title">Evolution, Benefits &amp; Applications</h3>
-            <p class="principle-desc">
-              <strong>Benefits:</strong> Modularity, Data Hiding, Code Reusability, and Extensibility.<br>
-              <strong>Applications:</strong> Enterprise Core Banking, financial ledgers, and transaction logging.<br>
-              <strong>Java vs C++ vs C#:</strong> Java compiles to bytecode executed on the JVM, features automated Garbage Collection, eliminates unsafe raw memory pointers, and enforces single class inheritance with interfaces.
-            </p>
-          </div>
-
-          <!-- Unit 2 -->
-          <div class="principle-card" data-unit="2">
-            <div class="principle-header">
-              <span class="principle-badge">UNIT 2: FUNDAMENTALS</span>
-              <span class="principle-file mono">Main.java &bull; BankServer.java</span>
-            </div>
-            <h3 class="principle-title">Control Flow, Types &amp; Arrays</h3>
-            <p class="principle-desc">
-              <strong>Control Flow:</strong> <code>switch-case</code> for menu and transaction routing; <code>if-else</code> for banking invariants; <code>for-each</code> and <code>while</code> loops.<br>
-              <strong>Datatypes &amp; Conversion:</strong> Primitive <code>double</code>, <code>int</code>, <code>boolean</code> with explicit narrowing casts <code>(int) Math.round()</code>.<br>
-              <strong>Wrapper Classes:</strong> <code>Double.valueOf()</code>, <code>Integer.parseInt()</code>, autoboxing.<br>
-              <strong>Arrays:</strong> Fixed-size arrays <code>Transaction[]</code> returned by <code>transfer()</code>.
-            </p>
-          </div>
-
-          <!-- Unit 3 -->
-          <div class="principle-card" data-unit="3">
-            <div class="principle-header">
-              <span class="principle-badge">UNIT 3: CLASSES &amp; OBJECTS</span>
-              <span class="principle-file mono">Account.java</span>
-            </div>
-            <h3 class="principle-title">Methods, Overloading, Recursion &amp; Nested</h3>
-            <p class="principle-desc">
-              <strong>Constructors:</strong> Constructor overloading with default chains (3 constructors in Account).<br>
-              <strong>Method Overloading:</strong> <code>deposit(amount)</code> vs <code>deposit(amount, description)</code>.<br>
-              <strong>Objects as Parameters:</strong> <code>transfer(Account target, double amount)</code> passes object references.<br>
-              <strong>Recursion:</strong> <code>sumTransactionsRecursively()</code> and <code>calculateCompoundInterestRecursively()</code>.<br>
-              <strong>Final &amp; Access Control:</strong> <code>final double MINIMUM_BALANCE</code>, <code>protected</code> fields.<br>
-              <strong>Nested &amp; Inner Classes:</strong> Static nested <code>Account.StatementSummary</code> and member inner class <code>Account.PassbookAuditor</code>.
-            </p>
-          </div>
-
-          <!-- Unit 4 -->
-          <div class="principle-card" data-unit="4">
-            <div class="principle-header">
-              <span class="principle-badge">UNIT 4: I/O BASICS</span>
-              <span class="principle-file mono">Account.java &bull; Main.java</span>
-            </div>
-            <h3 class="principle-title">Console I/O &amp; File Handling</h3>
-            <p class="principle-desc">
-              <strong>Console Input:</strong> <code>Scanner(System.in)</code> for reading commands, account numbers, and amounts.<br>
-              <strong>Console Output:</strong> <code>System.out.printf()</code> with formatted currency tables and column headers.<br>
-              <strong>File Handling:</strong> <code>exportStatementToFile()</code> writes passbook ledgers using <code>FileWriter</code> and <code>PrintWriter</code>; <code>readStatementFile()</code> reads back via <code>BufferedReader</code>.
-            </p>
-          </div>
-
-          <!-- Unit 5 -->
-          <div class="principle-card" data-unit="5">
-            <div class="principle-header">
-              <span class="principle-badge">UNIT 5: INHERITANCE</span>
-              <span class="principle-file mono">SeniorCitizenSavingsAccount.java</span>
-            </div>
-            <h3 class="principle-title">Multilevel Hierarchy &amp; Abstract Classes</h3>
-            <p class="principle-desc">
-              <strong>Base &amp; Derived:</strong> <code>Account</code> base; <code>SavingsAccount</code> &amp; <code>CurrentAccount</code> derived.<br>
-              <strong>Multilevel Hierarchy:</strong> <code>BankEntity</code> &rarr; <code>Account</code> &rarr; <code>SavingsAccount</code> &rarr; <code>SeniorCitizenSavingsAccount</code> (3 levels of derived classes).<br>
-              <strong>Abstract Class:</strong> <code>BankEntity</code> defines abstract methods <code>getEntityId()</code>, <code>describe()</code>, <code>toJson()</code>.<br>
-              <strong>Method Overriding:</strong> <code>@Override</code> on <code>withdraw()</code>, <code>monthEnd()</code>, <code>describe()</code> with <code>super</code> calls.
-            </p>
-          </div>
-
-          <!-- Unit 6 -->
-          <div class="principle-card" data-unit="6">
-            <div class="principle-header">
-              <span class="principle-badge">UNIT 6: EXCEPTION HANDLING</span>
-              <span class="principle-file mono">BankException.java</span>
-            </div>
-            <h3 class="principle-title">Custom Exception Types &amp; Invariants</h3>
-            <p class="principle-desc">
-              <strong>Exception Types:</strong> Checked (<code>BankException</code>, <code>IOException</code>) vs Unchecked (<code>IllegalArgumentException</code>).<br>
-              <strong>Custom Hierarchy:</strong> <code>BankException</code> &rarr; <code>InsufficientFundsException</code>, <code>MinimumBalanceException</code>, <code>WithdrawalLimitExceededException</code>, <code>InvalidAmountException</code>.<br>
-              <strong>Robust Handling:</strong> <code>try-catch-finally</code> blocks guard all transactions against illegal state.
-            </p>
-          </div>
-        </div>
 
         <!-- Side-by-Side Code Comparison: Method Overriding in Action -->
+        <details class="under-hood-details">
+          <summary>See method overriding <span>Code example</span></summary>
+          <div class="under-hood-details-content">
         <article class="ledger-card oop-code-comparison-card">
           <div class="card-head">
             <div>
-              <span class="card-number">CODE WALKTHROUGH</span>
-              <h2 class="card-title">How Method Overriding Works in Code</h2>
+              <span class="card-number">CODE EXAMPLE</span>
+              <h2 class="card-title">Withdrawal rules by account</h2>
             </div>
             <span class="code-compare-badge mono">Account vs SavingsAccount vs CurrentAccount</span>
           </div>
@@ -1080,13 +953,18 @@ public Transaction withdraw(double amount)
             </div>
           </div>
         </article>
+          </div>
+        </details>
 
         <!-- Custom Exception Hierarchy -->
+        <details class="under-hood-details">
+          <summary>View exception types <span>4 custom exceptions</span></summary>
+          <div class="under-hood-details-content">
         <article class="ledger-card exception-hierarchy-card">
           <div class="card-head">
             <div>
-              <span class="card-number">DOMAIN ERROR HANDLING</span>
-              <h2 class="card-title">Custom Exception Class Hierarchy</h2>
+              <span class="card-number">ERROR HANDLING</span>
+              <h2 class="card-title">Custom exceptions</h2>
             </div>
             <span class="code-compare-badge mono">java.lang.Exception</span>
           </div>
@@ -1118,24 +996,20 @@ public Transaction withdraw(double amount)
             </div>
           </div>
         </article>
+          </div>
+        </details>
 
         <!-- Dynamic Class Hierarchy Inspector -->
         <article class="ledger-card under-the-hood-section">
           <div class="card-head">
             <div>
-              <span class="card-number">DYNAMIC CLASS DIRECTORY</span>
-              <h2 class="card-title">Loaded Class Hierarchy &amp; Metadata</h2>
-            </div>
-            <div class="inspector-legend">
-              <span class="legend-item"><span class="legend-color color-base"></span> Base Class</span>
-              <span class="legend-item"><span class="legend-color color-sub"></span> Subclass</span>
-              <span class="legend-item"><span class="legend-color color-active"></span> Executed Method</span>
+              <span class="card-number">CLASS MAP</span>
+              <h2 class="card-title">How accounts relate</h2>
             </div>
           </div>
 
           <p class="card-subtext">
-            Reflected live from <code class="code-ref">/api/classes</code>. 
-            When banking actions execute, the runtime highlights the active class and method to demonstrate polymorphism.
+            Select a class to inspect its methods. Live activity is highlighted.
           </p>
 
           <div class="oop-tree-container" id="oop-tree">

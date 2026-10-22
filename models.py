@@ -1,5 +1,5 @@
 """
-models.py - Core Object-Oriented Programming (OOP) Models for PassBook
+models.py - Core Object-Oriented Programming (OOP) Models for Tally
 
 This file contains the foundational classes demonstrating core OOP principles:
 1. Classes & Objects: Blueprints (Account, Transaction) and instances.
@@ -421,7 +421,7 @@ class CurrentAccount(Account):
             "FEE",
             self.MONTHLY_MAINTENANCE_FEE,
             self.balance,
-            description="Monthly Passbook & Ledger Maintenance Fee (₹100)"
+            description="Monthly Tally account maintenance fee (₹100)"
         )
         self.transactions.append(tx)
         return tx
@@ -543,7 +543,7 @@ class ScoreIQ:
 
             tips = []
             if savings_points < 70:
-                tips.append("Build liquidity: Aim to retain at least 25% of incoming earnings in your passbook at month end.")
+                tips.append("Build liquidity: Aim to retain at least 25% of incoming earnings in your account at month end.")
             if regularity_points < 70:
                 tips.append("Deposit steadily: Spread your deposits into weekly routine instalments rather than single lump sums.")
             if not tips:
@@ -717,7 +717,7 @@ class ScoreIQ:
         if ratio < 1.3:
             tips.append("Increase operating buffer: Aim to keep monthly expenses under 65% of your income.")
         if balance < 10000:
-            tips.append("Grow passbook reserve: Increasing your average liquid balance towards ₹25,000 earns +40 points.")
+            tips.append("Grow your reserve: Increasing your average liquid balance towards ₹25,000 earns +40 points.")
         if loans >= 3:
             tips.append("Consolidate debt: Retiring active short-term loan accounts frees up score capacity.")
         if not tips:

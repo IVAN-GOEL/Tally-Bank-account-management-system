@@ -59,7 +59,7 @@ public class Account extends BankEntity {
 
         public String describe() {
             return String.format(
-                "Passbook Summary for %s [A/C: %s]: Closing Balance: ₹%,.2f | Deposits: ₹%,.2f | Withdrawals: ₹%,.2f | Count: %d",
+                "Account Summary for %s [A/C: %s]: Closing Balance: ₹%,.2f | Deposits: ₹%,.2f | Withdrawals: ₹%,.2f | Count: %d",
                 holder, accountNumber, closingBalance, totalDeposits, totalWithdrawals, transactionCount
             );
         }
@@ -245,13 +245,13 @@ public class Account extends BankEntity {
     // ==========================================
 
     /**
-     * Writes passbook statement to a local text file.
+     * Writes the account statement to a local text file.
      * Demonstrates File Output (FileWriter, PrintWriter, try-with-resources).
      */
     public void exportStatementToFile(String filePath) throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             writer.println("==================================================================");
-            writer.println("                   PASSBOOK OFFICIAL ACCOUNT STATEMENT            ");
+            writer.println("                     TALLY ACCOUNT STATEMENT                      ");
             writer.println("==================================================================");
             writer.printf("Account Number: %s\n", accountNumber);
             writer.printf("Account Holder: %s\n", holder);
