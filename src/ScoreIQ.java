@@ -223,7 +223,6 @@ public class ScoreIQ {
         int totalTx = txs.size();
         int depositCount = 0;
         double totalDeposits = 0.0;
-        int withdrawalCount = 0;
         int upiCount = 0;
 
         for (Transaction tx : txs) {
@@ -234,8 +233,6 @@ public class ScoreIQ {
             if ("DEPOSIT".equalsIgnoreCase(type) || "TRANSFER_IN".equalsIgnoreCase(type) || "INTEREST".equalsIgnoreCase(type)) {
                 depositCount++;
                 totalDeposits += amt;
-            } else if ("WITHDRAWAL".equalsIgnoreCase(type) || "TRANSFER_OUT".equalsIgnoreCase(type) || "FEE".equalsIgnoreCase(type)) {
-                withdrawalCount++;
             }
 
             if (desc.contains("upi") || desc.contains("gpay") || desc.contains("phonepe") || desc.contains("transfer")) {

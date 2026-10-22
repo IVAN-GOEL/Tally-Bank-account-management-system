@@ -11,9 +11,6 @@ Tests:
 """
 
 import unittest
-import json
-from datetime import datetime
-
 from models import (
     Transaction,
     Account,

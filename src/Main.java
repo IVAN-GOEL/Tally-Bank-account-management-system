@@ -276,7 +276,7 @@ public class Main {
         try {
             double amount = Double.parseDouble(scanner.nextLine().trim());
             // Objects as parameters + Returning object arrays (Transaction[])
-            Transaction[] txs = activeAccount.transfer(target, amount);
+            activeAccount.transfer(target, amount);
 
             System.out.println("[OOP Execution] Ran activeAccount.transfer(Account target, double amount).");
             System.out.println("                Demonstrates Objects as Parameters & Passing Object References.");

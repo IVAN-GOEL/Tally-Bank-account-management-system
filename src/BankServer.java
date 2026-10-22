@@ -22,7 +22,6 @@ import java.util.*;
  *    /api/transfer, /api/month-end, /api/scoreiq.
  */
 public class BankServer {
-    private static final int PORT = 8080;
     private static final String STATIC_DIR = "public";
 
     public static void main(String[] args) throws IOException {

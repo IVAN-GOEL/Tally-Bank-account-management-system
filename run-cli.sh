@@ -1,5 +1,4 @@
 #!/bin/bash
-if [ ! -d "bin" ]; then
-    ./build.sh
-fi
-java -cp bin Main
+set -e
+./build.sh
+exec java -cp bin Main
