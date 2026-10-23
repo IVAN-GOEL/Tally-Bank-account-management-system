@@ -1,9 +1,4 @@
-/**
- * TestPassBook.java - Standalone Tally OOP Test Suite
- * 
- * Verifies all 23 unit test scenarios without needing external JUnit jars.
- * Can be run anywhere: javac src/*.java && java -cp src TestPassBook
- */
+
 public class TestPassBook {
     private static int passed = 0;
     private static int failed = 0;
@@ -91,7 +86,6 @@ public class TestPassBook {
         SavingsAccount sav = new SavingsAccount("Ananya Verma", 5000.0);
         assertTrue("Savings Account".equals(sav.getAccountType()), "SavingsAccount type is 'Savings Account'");
 
-        // Withdraw down towards minimum balance ₹500
         try {
             sav.withdraw(3500.0);
             assertTrue(sav.getBalance() == 1500.0, "SavingsAccount allows withdrawal above min balance");
@@ -99,7 +93,6 @@ public class TestPassBook {
             assertTrue(false, "SavingsAccount withdraw failed: " + e);
         }
 
-        // Attempting to breach ₹500 threshold (1500 - 1100 = 400 < 500)
         try {
             sav.withdraw(1100.0);
             assertTrue(false, "SavingsAccount did not enforce ₹500 minimum balance rule");
@@ -109,7 +102,6 @@ public class TestPassBook {
             assertTrue(false, "SavingsAccount min balance threw wrong exception: " + e);
         }
 
-        // 5 monthly withdrawals limit
         SavingsAccount limitAcc = new SavingsAccount("Limit Tester", 10000.0);
         try {
             for (int i = 0; i < 5; i++) {
@@ -129,7 +121,6 @@ public class TestPassBook {
             assertTrue(false, "SavingsAccount 6th withdrawal threw wrong exception: " + e);
         }
 
-        // Month-end 3.5% p.a. interest calculation (12000 * 0.035 / 12 = 35.0)
         SavingsAccount intAcc = new SavingsAccount("Interest Tester", 12000.0);
         try {
             Transaction tx = intAcc.monthEnd();
@@ -144,7 +135,6 @@ public class TestPassBook {
         CurrentAccount curr = new CurrentAccount("Kavita Enterprises", 2000.0);
         assertTrue("Current Account".equals(curr.getAccountType()), "CurrentAccount type is 'Current Account'");
 
-        // Overdraft allowance down to -₹10,000
         try {
             curr.withdraw(5000.0);
             assertTrue(curr.getBalance() == -3000.0, "CurrentAccount allows overdraft to -₹3,000.00");
@@ -154,7 +144,6 @@ public class TestPassBook {
             assertTrue(false, "CurrentAccount overdraft withdrawal threw error: " + e);
         }
 
-        // Breaching -₹10,000 limit
         try {
             curr.withdraw(600.0);
             assertTrue(false, "CurrentAccount breaching overdraft did not throw InsufficientFundsException");
@@ -164,7 +153,6 @@ public class TestPassBook {
             assertTrue(false, "CurrentAccount overdraft breach threw wrong exception: " + e);
         }
 
-        // Month-end flat ₹100 maintenance fee deduction
         CurrentAccount feeAcc = new CurrentAccount("Fee Tester", 2000.0);
         try {
             Transaction tx = feeAcc.monthEnd();
@@ -220,12 +208,10 @@ public class TestPassBook {
     private static void testSyllabusOOPFeatures() {
         System.out.println("\n--- Testing Syllabus Concepts (Inheritance, Abstraction, Recursion, I/O) ---");
 
-        // 1. Abstract Class & Polymorphism (BankEntity)
         BankEntity entity = new Account("Kavita Rao", 10000.0);
         assertTrue(entity.getEntityId().startsWith("PB"), "BankEntity polymorphic getEntityId returns account number");
         assertTrue(entity.describe().contains("Base Account"), "BankEntity polymorphic describe() works");
 
-        // 2. Multilevel Hierarchy (Account -> SavingsAccount -> SeniorCitizenSavingsAccount)
         SeniorCitizenSavingsAccount senior = new SeniorCitizenSavingsAccount("Dada Ji", 20000.0);
         assertTrue("Senior Citizen Savings Account".equals(senior.getAccountType()), "Multilevel subclass identifies as Senior Citizen");
         assertTrue(senior instanceof SavingsAccount, "SeniorCitizenSavingsAccount is an instance of SavingsAccount");
@@ -234,31 +220,27 @@ public class TestPassBook {
 
         try {
             Transaction interestTx = senior.monthEnd();
-            // 20000 * 0.0425 / 12 = 70.83
+
             assertTrue(interestTx != null && interestTx.getAmount() == 70.83, "Senior citizen preferential 4.25% p.a. interest calculated (₹70.83)");
             assertTrue(senior.getBalance() == 20070.83, "Senior citizen balance updated with interest");
         } catch (Exception e) {
             assertTrue(false, "Senior citizen monthEnd threw exception: " + e.getMessage());
         }
 
-        // 3. Static Nested Class (StatementSummary)
         Account.StatementSummary summary = senior.getStatementSummary();
         assertTrue(summary.closingBalance == 20070.83, "StatementSummary static nested class holds correct balance");
         assertTrue(summary.totalDeposits == 70.83, "StatementSummary holds total deposits including interest");
 
-        // 4. Inner Class (PassbookAuditor)
         Account.PassbookAuditor auditor = senior.new PassbookAuditor();
         assertTrue(auditor.isLedgerConsistent(), "Inner class PassbookAuditor successfully inspects outer class state");
 
-        // 5. Recursion: Transaction sum and Compound Interest
         double sum = Account.sumTransactionsRecursively(senior.getTransactions(), 0);
         assertTrue(sum == 70.83, "sumTransactionsRecursively sums transactions recursively");
 
         double projected = senior.calculateCompoundInterestRecursively(1000.0, 0.10, 2);
-        // 1000 * 1.10 = 1100, 1100 * 1.10 = 1210
+
         assertTrue(projected == 1210.0, "calculateCompoundInterestRecursively projects compound growth over 2 years (₹1,210.00)");
 
-        // 6. File I/O: Export Statement and Read Back
         String tempFile = "statement_test.txt";
         try {
             senior.exportStatementToFile(tempFile);
@@ -270,7 +252,6 @@ public class TestPassBook {
             assertTrue(false, "File I/O test threw exception: " + e.getMessage());
         }
 
-        // 7. Statement Review (ScoreIQ External Statement Analysis)
         String sampleStatement = 
             "2026-03-01, Swiggy Partner Payout, 9500.00, CREDIT\n" +
             "2026-03-05, Petrol Bunk UPI, 600.00, DEBIT\n" +

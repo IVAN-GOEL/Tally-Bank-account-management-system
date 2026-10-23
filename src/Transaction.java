@@ -1,21 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Transaction.java
- * Represents an immutable financial transaction in the bank ledger.
- * 
- * Demonstrates:
- * 1. Inheritance & Abstraction: Extends abstract class BankEntity.
- * 2. Encapsulation: Private final fields, immutable state, public getters.
- * 3. Final Keyword: Immutable fields cannot be modified after construction.
- * 4. Datatypes & Formatting: Uses double for currency, String for dates and descriptions.
- * 
- * Syllabus Mapping:
- * - Programming Fundamentals: Datatypes, Operators, Control flow.
- * - Introduction to Classes: Constructors, Encapsulation, final fields.
- * - Inheritance: Extending abstract class BankEntity, implementing abstract methods.
- */
 public class Transaction extends BankEntity {
     private final String id;            // Unique transaction identifier
     private final String type;          // "DEPOSIT", "WITHDRAWAL", "INTEREST", "FEE", "TRANSFER_IN", "TRANSFER_OUT"
@@ -44,7 +29,6 @@ public class Transaction extends BankEntity {
         this(type, amount, balanceAfter, null, description);
     }
 
-    // Encapsulated Getters
     public String getId() { return id; }
     public String getType() { return type; }
     public double getAmount() { return amount; }
@@ -52,7 +36,6 @@ public class Transaction extends BankEntity {
     public String getDateStr() { return dateStr; }
     public String getDescription() { return description; }
 
-    // BankEntity Abstract Method Implementations
     @Override
     public String getEntityId() {
         return id;
