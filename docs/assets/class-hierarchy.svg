@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 430" width="100%" height="100%">
+  <defs>
+    <linearGradient id="clsBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e17"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="abstractGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="baseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="derivedGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="multiGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#be185d"/>
+    </linearGradient>
+    <linearGradient id="excGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="940" height="430" rx="14" fill="url(#clsBg)" stroke="#1e293b" stroke-width="1.5"/>
+
+  <!-- Title -->
+  <text x="36" y="38" fill="#f8fafc" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="18" font-weight="700">Tally Java OOP Class &amp; Inheritance Hierarchy</text>
+  <text x="36" y="58" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12">Direct mapping to College Syllabus: Multilevel Inheritance, Abstract Classes, Nested/Inner Classes, and Exceptions.</text>
+
+  <!-- ==================================================================== -->
+  <!-- 1. ABSTRACT BASE: BankEntity -->
+  <!-- ==================================================================== -->
+  <g transform="translate(36, 85)">
+    <rect width="250" height="90" rx="6" fill="#1e293b" stroke="#3b82f6" stroke-width="1"/>
+    <rect width="250" height="24" rx="4" fill="url(#abstractGrad)"/>
+    <text x="12" y="16" fill="#ffffff" font-family="monospace" font-size="11" font-weight="700">&lt;&lt;Abstract Class&gt;&gt; BankEntity</text>
+
+    <text x="12" y="42" fill="#93c5fd" font-family="monospace" font-size="10">+ getEntityId()* : String</text>
+    <text x="12" y="58" fill="#93c5fd" font-family="monospace" font-size="10">+ describe()* : String</text>
+    <text x="12" y="74" fill="#93c5fd" font-family="monospace" font-size="10">+ toJson()* : String</text>
+  </g>
+
+  <!-- Entity Branch 1: Transaction (Right side) -->
+  <path d="M 160 175 L 160 215 L 80 215 L 80 240" fill="none" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="160,175 156,183 164,183" fill="#475569"/>
+
+  <g transform="translate(20, 240)">
+    <rect width="180" height="110" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+    <rect width="180" height="22" rx="4" fill="#334155"/>
+    <text x="10" y="15" fill="#f1f5f9" font-family="monospace" font-size="10" font-weight="700">Transaction</text>
+    <text x="10" y="38" fill="#cbd5e1" font-family="monospace" font-size="9">- id, dateStr, type</text>
+    <text x="10" y="52" fill="#cbd5e1" font-family="monospace" font-size="9">- amount, balanceAfter</text>
+    <text x="10" y="66" fill="#cbd5e1" font-family="monospace" font-size="9">- description</text>
+    <text x="10" y="84" fill="#60a5fa" font-family="monospace" font-size="9">+ getEntityId(), toJson()</text>
+    <text x="10" y="98" fill="#60a5fa" font-family="monospace" font-size="9">+ describe()</text>
+  </g>
+
+  <!-- Entity Branch 2: Account (Base class) -->
+  <path d="M 160 175 L 160 215 L 290 215 L 290 240" fill="none" stroke="#475569" stroke-width="1.5"/>
+  <polygon points="160,175 156,183 164,183" fill="#475569"/>
+
+  <g transform="translate(220, 240)">
+    <rect width="210" height="170" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="1"/>
+    <rect width="210" height="22" rx="4" fill="url(#baseGrad)"/>
+    <text x="10" y="15" fill="#ffffff" font-family="monospace" font-size="10" font-weight="700">Account (Base Class)</text>
+    <text x="10" y="36" fill="#cbd5e1" font-family="monospace" font-size="9"># accountNumber, holder</text>
+    <text x="10" y="50" fill="#cbd5e1" font-family="monospace" font-size="9"># balance : double</text>
+    <text x="10" y="64" fill="#cbd5e1" font-family="monospace" font-size="9"># transactions : List</text>
+    <text x="10" y="82" fill="#34d399" font-family="monospace" font-size="9">+ deposit() [Overloaded x2]</text>
+    <text x="10" y="96" fill="#34d399" font-family="monospace" font-size="9">+ withdraw() [Overloaded x2]</text>
+    <text x="10" y="110" fill="#34d399" font-family="monospace" font-size="9">+ transfer(target, amount)</text>
+    <text x="10" y="124" fill="#34d399" font-family="monospace" font-size="9">+ monthEnd() : Transaction</text>
+    <text x="10" y="138" fill="#38bdf8" font-family="monospace" font-size="9">+ sumTransactionsRecursively()</text>
+    <text x="10" y="152" fill="#38bdf8" font-family="monospace" font-size="9">+ exportStatementToFile()</text>
+  </g>
+
+  <!-- Inheritance 1: Account -> SavingsAccount -->
+  <path d="M 430 280 L 470 280" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+  <polygon points="430,280 438,276 438,284" fill="#a78bfa"/>
+
+  <g transform="translate(470, 210)">
+    <rect width="210" height="100" rx="6" fill="#1e293b" stroke="#8b5cf6" stroke-width="1"/>
+    <rect width="210" height="22" rx="4" fill="url(#derivedGrad)"/>
+    <text x="10" y="15" fill="#ffffff" font-family="monospace" font-size="10" font-weight="700">SavingsAccount (Derived)</text>
+    <text x="10" y="38" fill="#cbd5e1" font-family="monospace" font-size="9">+ MIN_BALANCE: ₹500.0</text>
+    <text x="10" y="52" fill="#cbd5e1" font-family="monospace" font-size="9">+ RATE: 3.5% p.a.</text>
+    <text x="10" y="66" fill="#cbd5e1" font-family="monospace" font-size="9">+ MAX_WITHDRAWALS: 5</text>
+    <text x="10" y="84" fill="#c084fc" font-family="monospace" font-size="9">@Override withdraw(), monthEnd()</text>
+  </g>
+
+  <!-- Inheritance 2: SavingsAccount -> SeniorCitizenSavingsAccount (Multilevel) -->
+  <path d="M 680 250 L 715 250" fill="none" stroke="#ec4899" stroke-width="1.5"/>
+  <polygon points="680,250 688,246 688,254" fill="#ec4899"/>
+
+  <g transform="translate(715, 210)">
+    <rect width="200" height="100" rx="6" fill="#1e293b" stroke="#ec4899" stroke-width="1"/>
+    <rect width="200" height="22" rx="4" fill="url(#multiGrad)"/>
+    <text x="8" y="15" fill="#ffffff" font-family="monospace" font-size="9.5" font-weight="700">SeniorCitizen (Multilevel)</text>
+    <text x="8" y="38" fill="#fbcfe8" font-family="monospace" font-size="8.5">+ SENIOR_RATE: 4.25% p.a.</text>
+    <text x="8" y="52" fill="#cbd5e1" font-family="monospace" font-size="8.5">Inherits: Min ₹500 floor</text>
+    <text x="8" y="66" fill="#cbd5e1" font-family="monospace" font-size="8.5">Inherits: 5 max withdrawals</text>
+    <text x="8" y="84" fill="#f472b6" font-family="monospace" font-size="8.5">@Override monthEnd()</text>
+  </g>
+
+  <!-- Inheritance 3: Account -> CurrentAccount -->
+  <path d="M 430 350 L 470 350" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+  <polygon points="430,350 438,346 438,354" fill="#a78bfa"/>
+
+  <g transform="translate(470, 320)">
+    <rect width="210" height="90" rx="6" fill="#1e293b" stroke="#8b5cf6" stroke-width="1"/>
+    <rect width="210" height="22" rx="4" fill="url(#derivedGrad)"/>
+    <text x="10" y="15" fill="#ffffff" font-family="monospace" font-size="10" font-weight="700">CurrentAccount (Derived)</text>
+    <text x="10" y="38" fill="#cbd5e1" font-family="monospace" font-size="9">+ OVERDRAFT_LIMIT: ₹10,000</text>
+    <text x="10" y="52" fill="#cbd5e1" font-family="monospace" font-size="9">+ MONTHLY_FEE: ₹100.0</text>
+    <text x="10" y="72" fill="#c084fc" font-family="monospace" font-size="9">@Override withdraw(), monthEnd()</text>
+  </g>
+
+  <!-- Nested / Inner Classes Badge Box (Top Right) -->
+  <g transform="translate(320, 85)">
+    <rect width="360" height="90" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+    <rect width="360" height="22" rx="4" fill="#334155"/>
+    <text x="10" y="15" fill="#f8fafc" font-family="monospace" font-size="10" font-weight="700">Nested &amp; Inner Classes (Inside Account.java)</text>
+    <text x="10" y="38" fill="#38bdf8" font-family="monospace" font-size="9.5">static class StatementSummary</text>
+    <text x="10" y="50" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9">Encapsulates net cashflow, deposits, withdrawals.</text>
+    <text x="10" y="68" fill="#38bdf8" font-family="monospace" font-size="9.5">class PassbookAuditor</text>
+    <text x="10" y="80" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9">Member inner class with access to outer private fields.</text>
+  </g>
+
+  <!-- Custom Exceptions Box (Far Right) -->
+  <g transform="translate(710, 85)">
+    <rect width="205" height="90" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
+    <rect width="205" height="22" rx="4" fill="url(#excGrad)"/>
+    <text x="8" y="15" fill="#ffffff" font-family="monospace" font-size="10" font-weight="700">Custom Exception Hierarchy</text>
+    <text x="8" y="38" fill="#fde68a" font-family="monospace" font-size="8.5">BankException (Checked Base)</text>
+    <text x="8" y="50" fill="#cbd5e1" font-family="monospace" font-size="8.5">├─ InsufficientFundsException</text>
+    <text x="8" y="62" fill="#cbd5e1" font-family="monospace" font-size="8.5">├─ MinimumBalanceException</text>
+    <text x="8" y="74" fill="#cbd5e1" font-family="monospace" font-size="8.5">├─ WithdrawalLimitExceeded</text>
+    <text x="8" y="86" fill="#cbd5e1" font-family="monospace" font-size="8.5">└─ InvalidAmountException</text>
+  </g>
+</svg>

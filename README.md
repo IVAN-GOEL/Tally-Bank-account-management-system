@@ -1,206 +1,240 @@
-# Tally: Bank Account Management System & ScoreIQ (Java OOP)
+<div align="center">
 
-> *"A small bank, built from classes — aligned directly with the College OOP Syllabus."*
+<img src="docs/assets/banner.svg" alt="Tally: Bank Account Management System &amp; ScoreIQ" width="100%">
 
-Tally is an educational **Object-Oriented Programming (OOP) mini-project** built in **pure, beginner-readable Java** for college computer science coursework, laboratory evaluations, and viva voce examinations. It models a commercial bank account ledger while demonstrating all core curriculum topics: **Class Fundamentals, Object Reference Variables, Method & Constructor Overloading, Objects as Parameters, Recursion, Static Nested & Inner Classes, Console & File I/O, Multilevel Inheritance, Abstract Classes, Method Overriding, Custom Exception Hierarchies, and ScoreIQ Alternative Credit Scoring**.
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-17%2B-orange?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 17+">
+  <img src="https://img.shields.io/badge/OOP_Curriculum-100%25_Compliant-success?style=for-the-badge" alt="OOP Compliant">
+  <img src="https://img.shields.io/badge/Tests-48_Passed_•_0_Failed-10b981?style=for-the-badge" alt="48 Tests Passing">
+  <img src="https://img.shields.io/badge/Dependencies-Zero_(Standard_Lib_Only)-blue?style=for-the-badge" alt="Zero Dependencies">
+  <img src="https://img.shields.io/badge/AI_Engine-Google_Gemini_3.5-8b5cf6?style=for-the-badge&logo=google&logoColor=white" alt="Google Gemini AI">
+</p>
+
+**An educational Object-Oriented Banking System and Alternative Underwriter built from scratch in pure, readable Java.**  
+*Engineered specifically for university computer science laboratory evaluations, capstone submissions, and oral viva voce examinations.*
+
+[Quick Start](#-quick-start--terminal-commands) •
+[Architecture](#-system-architecture) •
+[OOP Syllabus Map](#-complete-college-oop-syllabus-mapping) •
+[ScoreIQ Engine](#-scoreiq-alternative-credit-scoring) •
+[Viva Defense Guide](#-viva-voce-oral-defense-cheat-sheet)
+
+</div>
 
 ---
 
-## 1. Complete College Course Syllabus Mapping
+## 🌟 Executive Summary & Dual Mission
 
-This codebase is specifically engineered to demonstrate the key units of the Object-Oriented Programming (OOP) syllabus:
+Tally fulfills two critical purposes:
 
-```mermaid
-classDiagram
-    class BankEntity {
-        <<Abstract>>
-        +getEntityId()* String
-        +describe()* String
-        +toJson()* String
-    }
+1. **Academic Excellence (100% Syllabus Coverage)**: Every single core topic in standard university Object-Oriented Programming syllabi is implemented in clean, idiomatic Java without external libraries. It features **Multilevel Inheritance, Abstract Classes, Polymorphism, Method Overloading, Objects as Parameters, Recursion, Member Inner Classes, Static Nested Classes, Custom Exception Hierarchies, and File I/O**.
+2. **FinTech Innovation (ScoreIQ Alternative Credit Engine)**: Traditional credit rating bureaus (such as CIBIL and Experian) require an applicant to have prior debt history. Tally introduces **ScoreIQ**, an alternative cash-flow underwriter that assesses digital banking velocity, UPI habits, and liquidity to generate a transparent score (300 to 900) for unbanked gig-economy workers, freelancers, and students. It integrates both a deterministic rule engine and **Google Gemini 3.5 AI**.
 
-    class Transaction {
-        -id: final String
-        -type: final String
-        -amount: final double
-        -balanceAfter: final double
-        -dateStr: final String
-        -description: final String
-        +getEntityId() String
-        +describe() String
-        +toJson() String
-    }
+---
 
-    class Account {
-        #accountNumber: final String
-        #holder: String
-        #balance: double
-        #transactions: List~Transaction~
-        +deposit(amount) Transaction
-        +deposit(amount, desc) Transaction
-        +withdraw(amount) Transaction
-        +withdraw(amount, desc) Transaction
-        +transfer(target, amount) Transaction[]
-        +monthEnd() Transaction
-        +describe() String
-        +exportStatementToFile(file) void
-        +readStatementFile(file)$ String
-        +sumTransactionsRecursively(list, idx)$ double
-        +calculateCompoundInterestRecursively(p, r, y) double
-    }
+## 🖥️ System Architecture
 
-    class SavingsAccount {
-        +MINIMUM_BALANCE: 500.0
-        +ANNUAL_INTEREST_RATE: 0.035
-        +MAX_MONTHLY_WITHDRAWALS: 5
-        +withdraw(amount, desc)* Transaction
-        +monthEnd()* Transaction
-        +describe()* String
-    }
+Tally follows a decoupled 4-tier modular architecture designed for maintainability and clear separation of concerns:
 
-    class SeniorCitizenSavingsAccount {
-        +SENIOR_ANNUAL_INTEREST_RATE: 0.0425
-        +monthEnd()* Transaction
-        +describe()* String
-    }
+<div align="center">
+  <img src="docs/assets/architecture.svg" alt="Tally System Architecture" width="100%">
+</div>
 
-    class CurrentAccount {
-        +OVERDRAFT_LIMIT: 10000.0
-        +MONTHLY_MAINTENANCE_FEE: 100.0
-        +withdraw(amount, desc)* Transaction
-        +monthEnd()* Transaction
-        +describe()* String
-    }
+### Layer Breakdown
+- **Tier 1: Presentation Layer**: Dual interface consisting of a terminal-based CLI (`Main.java`) and a responsive web dashboard (`public/index.html`, `public/app.js`).
+- **Tier 2: Service & Controller Layer**: Built-in HTTP server (`BankServer.java`) implementing zero-dependency REST endpoints, alongside `ScoreIQ.java` alternative underwriting logic.
+- **Tier 3: Domain Entity Layer**: Encapsulated banking classes modeling accounts, transaction ledgers, balance assertions, and nested analytical helpers.
+- **Tier 4: Exception & Storage Layer**: Checked domain exception hierarchy and persistence interfaces utilizing Java File I/O (`FileWriter`, `BufferedReader`).
 
-    BankEntity <|-- Transaction : Extends Abstract Class
-    BankEntity <|-- Account : Extends Abstract Class
-    Account <|-- SavingsAccount : Derived Class (Inheritance)
-    SavingsAccount <|-- SeniorCitizenSavingsAccount : Multilevel Derived Class (Multilevel Hierarchy)
-    Account <|-- CurrentAccount : Derived Class (Inheritance)
-```
+---
 
-| Syllabus Topic | Concepts Covered | Implementation in Tally | Source File |
+## 🏛️ Class & Inheritance Hierarchy
+
+<div align="center">
+  <img src="docs/assets/class-hierarchy.svg" alt="Tally Class &amp; Inheritance Hierarchy" width="100%">
+</div>
+
+### Class Descriptions
+
+| Class / Entity | Type | Role in OOP Hierarchy | Key Methods &amp; Syllabus Topics |
 | :--- | :--- | :--- | :--- |
-| **1. History & Evolution of OOP** | Benefits of OOP (Modularity, Data Hiding, Reusability, Extensibility); Applications in enterprise systems; Java vs C++ vs C# architecture (JVM Bytecode, Garbage Collection, pointer safety, single class inheritance). | Explains benefits via encapsulated bank balances and transaction logging; abstract class `BankEntity` enforces core contracts. | [`src/BankEntity.java`](src/BankEntity.java) |
-| **2. Programming Fundamentals** | Control flow statements (`if-else`, `switch-case`, `while`, `for-each`); Operators; Datatypes (primitive `double`, `int`, `boolean` vs reference types); Type conversion & explicit narrowing casts `(int) Math.round()`; Wrapper classes (`Double.valueOf()`, `Integer.parseInt()`); Arrays (`Transaction[]`). | Menu control in `Main.java`, transaction routing in `BankServer.java`, array returns in `transfer()`. | [`src/Main.java`](src/Main.java), [`src/Account.java`](src/Account.java) |
-| **3. Introduction to Classes** | Class fundamentals; Declaring objects; Assigning object reference variables; Methods; Constructors; Constructor Overloading (3 constructors in Account); Method Overloading (`deposit` & `withdraw` variants); Objects as parameters (`transfer(Account target, double amount)`); Argument passing (pass-by-value of reference); Returning objects (`Transaction`, `Transaction[]`, `StatementSummary`); Recursion; Access control (`private`, `protected`, `public`); `final` keyword; Static Nested Classes (`StatementSummary`) & Member Inner Classes (`PassbookAuditor`). | Encapsulated balance mutation; recursive compounding; nested summary classes. | [`src/Account.java`](src/Account.java), [`src/Transaction.java`](src/Transaction.java) |
-| **4. I/O Basics** | Reading Console Input (`Scanner`); Writing Console Output (`System.out.printf`); File Handling (`FileWriter`, `PrintWriter`, `FileReader`, `BufferedReader`). | Console interface in `Main.java`; File export and readback methods `exportStatementToFile()` and `readStatementFile()`. | [`src/Main.java`](src/Main.java), [`src/Account.java`](src/Account.java) |
-| **5. Inheritance** | Base and derived classes; Multilevel hierarchy (`BankEntity` -> `Account` -> `SavingsAccount` -> `SeniorCitizenSavingsAccount`); Access modifiers in inheritance (`protected` fields); Method overriding (`@Override` on `withdraw()`, `monthEnd()`, `describe()`); Abstract classes (`BankEntity`). | Subclass-specific banking rules; senior citizen preferential 4.25% interest rate. | [`src/Account.java`](src/Account.java), [`src/SavingsAccount.java`](src/SavingsAccount.java), [`src/SeniorCitizenSavingsAccount.java`](src/SeniorCitizenSavingsAccount.java), [`src/CurrentAccount.java`](src/CurrentAccount.java) |
-| **6. Exception Handling** | Exception types (Checked vs Unchecked); Creating custom exceptions; Exception hierarchy (`BankException extends Exception`); `try`, `catch`, `finally`, `throw`, `throws`. | Domain errors: `InsufficientFundsException`, `MinimumBalanceException`, `WithdrawalLimitExceededException`, `InvalidAmountException`. | [`src/BankException.java`](src/BankException.java) & exception classes |
-| **7. Side Feature: ScoreIQ** | Deterministic, transparent alternative credit score (300 to 900) based on account cash-flow discipline without requiring loan debt history. | Evaluates Transaction Activity, Regularity, Savings Habit, Stability, and UPI velocity. | [`src/ScoreIQ.java`](src/ScoreIQ.java) |
+| **`BankEntity`** | `abstract class` | Contract Base | `getEntityId()`, `describe()`, `toJson()` (Enforces abstract method contracts) |
+| **`Account`** | `class` | Base Domain Class | `deposit()` (Overloaded), `withdraw()`, `transfer()` (Objects as parameters), `monthEnd()`, recursion, and File I/O |
+| **`SavingsAccount`** | `class` | Single Inheritance | Extends `Account`. Implements ₹500 floor, 3.5% p.a. interest, and 5-withdrawal monthly limit |
+| **`SeniorCitizenSavingsAccount`** | `class` | **Multilevel Hierarchy** | Extends `SavingsAccount`. Overrides `monthEnd()` with preferential **4.25% p.a.** senior bonus interest |
+| **`CurrentAccount`** | `class` | Hierarchical Subclass | Extends `Account`. Implements **₹10,000 overdraft facility** and ₹100 maintenance deduction |
+| **`Transaction`** | `class` | Immutable Value Object | Extends `BankEntity`. Encapsulates immutable transaction records (`id`, `amount`, `balanceAfter`) |
+| **`Account.StatementSummary`** | `static nested class` | Encapsulated Aggregator | Bundles net margin, debit/credit totals, and activity metrics |
+| **`Account.PassbookAuditor`** | `inner class` | Member Inner Class | Retains direct access to outer instance `holder`, `balance`, and `transactions` fields |
 
 ---
 
-## 2. In-Depth Syllabus Demonstrations
+## 📋 Complete College OOP Syllabus Mapping
 
-### A. Recursion (Syllabus: "Recursion in Methods")
-Located in [`src/Account.java`](src/Account.java):
-1. **Recursive Transaction Summation**:
-   ```java
-   public static double sumTransactionsRecursively(List<Transaction> list, int index) {
-       if (list == null || index >= list.size()) return 0.0; // Base case
-       return list.get(index).getAmount() + sumTransactionsRecursively(list, index + 1); // Recursive case
-   }
-   ```
-2. **Recursive Compound Interest Projection**:
-   ```java
-   public double calculateCompoundInterestRecursively(double principal, double annualRate, int yearsRemaining) {
-       if (yearsRemaining <= 0) return Math.round(principal * 100.0) / 100.0; // Base case
-       double accumulated = principal * (1.0 + annualRate);
-       return calculateCompoundInterestRecursively(accumulated, annualRate, yearsRemaining - 1); // Recursive case
-   }
-   ```
+The codebase maps 1-to-1 with university examination topics. Use this table during project presentations:
 
-### B. Nested & Inner Classes (Syllabus: "Nested and Inner Classes")
-Located in [`src/Account.java`](src/Account.java):
-1. **Static Nested Class** (`Account.StatementSummary`):
-   Encapsulates metrics (total deposits, total withdrawals, net cashflow, transaction count).
-2. **Member Inner Class** (`Account.PassbookAuditor`):
-   Has direct access to the outer instance's `holder`, `balance`, and `transactions` fields to perform internal consistency checks.
+| Syllabus Unit | Key Academic Concepts | How Implemented in Tally | Source Code Location |
+| :--- | :--- | :--- | :--- |
+| **1. History &amp; Benefits of OOP** | Modularity, Encapsulation, Data Hiding, Code Reusability, Extensibility. | Bank balances are encapsulated (`protected` with controlled mutators). `BankEntity` guarantees contract extensibility. | [`src/BankEntity.java`](src/BankEntity.java), [`src/Account.java`](src/Account.java) |
+| **2. Programming Fundamentals** | Control flow (`switch`, `if-else`), datatypes, wrapper classes (`Double.valueOf()`), type conversions, arrays (`Transaction[]`). | Menu routing in `Main.java`, transaction array returns in `transfer()`, numeric parsing in `BankServer.java`. | [`src/Main.java`](src/Main.java), [`src/BankServer.java`](src/BankServer.java) |
+| **3. Introduction to Classes &amp; Objects** | Object reference variables, constructors, constructor overloading, method overloading. | 3 overloaded constructors in `Account`. Overloaded `deposit(double)` and `deposit(double, String)`. | [`src/Account.java`](src/Account.java#L30-L55) |
+| **4. Objects as Parameters &amp; Return** | Passing object references by value; returning objects and arrays. | `transfer(Account target, double amount)` mutates sender and receiver; returns `Transaction[]`. | [`src/Account.java`](src/Account.java#L115-L135) |
+| **5. Recursion in Methods** | Base conditions, recursive calls, call stack management. | `sumTransactionsRecursively()` and `calculateCompoundInterestRecursively()`. | [`src/Account.java`](src/Account.java#L160-L185) |
+| **6. Nested &amp; Inner Classes** | Static nested classes vs. Non-static member inner classes. | `Account.StatementSummary` (static) and `Account.PassbookAuditor` (inner class accessing outer private fields). | [`src/Account.java`](src/Account.java#L230-L280) |
+| **7. Console &amp; File I/O** | `Scanner`, `System.out.printf`, `FileWriter`, `PrintWriter`, `BufferedReader`. | Formatted console menu in `Main.java`. Disk export and file readback in `exportStatementToFile()` / `readStatementFile()`. | [`src/Main.java`](src/Main.java), [`src/Account.java`](src/Account.java#L190-L225) |
+| **8. Inheritance &amp; Multilevel Hierarchy** | Base vs derived classes, `super` keyword, method overriding (`@Override`), multilevel hierarchy. | `BankEntity` → `Account` → `SavingsAccount` → `SeniorCitizenSavingsAccount`. Also `Account` → `CurrentAccount`. | [`src/SeniorCitizenSavingsAccount.java`](src/SeniorCitizenSavingsAccount.java) |
+| **9. Abstract Classes** | Abstract methods, contract enforcement, inability to instantiate directly. | `BankEntity` declares abstract methods `getEntityId()`, `describe()`, and `toJson()`. | [`src/BankEntity.java`](src/BankEntity.java) |
+| **10. Custom Exception Hierarchy** | Checked exceptions, `throw`, `throws`, `try-catch-finally`, domain error handling. | `BankException` base class with 4 domain subclasses: `InsufficientFunds`, `MinimumBalance`, `WithdrawalLimit`, `InvalidAmount`. | [`src/BankException.java`](src/BankException.java) |
 
-### C. File I/O (Syllabus: "Files Handling")
-Located in [`src/Account.java`](src/Account.java):
-1. **Writing to File**: `exportStatementToFile(String filePath)` writes an official ledger statement to disk using `java.io.FileWriter` and `java.io.PrintWriter`.
-2. **Reading from File**: `readStatementFile(String filePath)` reads back the statement file line-by-line using `java.io.FileReader` and `java.io.BufferedReader`.
+---
 
-### D. Multilevel Hierarchy (Syllabus: "Multilevel Hierarchy")
-Located in [`src/SeniorCitizenSavingsAccount.java`](src/SeniorCitizenSavingsAccount.java):
+## 🧠 ScoreIQ: Alternative Credit Scoring
+
+<div align="center">
+  <img src="docs/assets/scoreiq-pipeline.svg" alt="ScoreIQ Evaluation Pipeline" width="100%">
+</div>
+
+### The Problem It Solves
+Over 60% of India's working population (gig workers, delivery executives, small merchants, fresh college graduates) are deemed **"Credit Invisible"** by traditional credit bureaus because they have never taken a bank loan.
+
+### How ScoreIQ Evaluates Creditworthiness
+ScoreIQ bypasses prior loan debt and evaluates actual **cash-flow discipline** across 4 weighted pillars:
+
 ```
-BankEntity (Abstract) -> Account (Base Class) -> SavingsAccount (Derived Class) -> SeniorCitizenSavingsAccount (Multilevel Subclass)
+ScoreIQ = 300 + ( (Activity × 0.20) + (Regularity × 0.25) + (Savings × 0.25) + (Stability × 0.30) ) × 6.0
 ```
-- `SeniorCitizenSavingsAccount` inherits withdrawal rules and minimum balance from `SavingsAccount`.
-- Overrides `monthEnd()` to credit a preferential **4.25% per annum** monthly interest (+0.75% senior citizen bonus).
 
-### E. Custom Exception Hierarchy (Syllabus: "Creating Exception")
+1. **Transaction Velocity (20%)**: Healthy cadence of day-to-day digital transactions and UPI payments.
+2. **Deposit Regularity (25%)**: Predictable frequency of incoming earnings (e.g. Swiggy weekly payouts, merchant QR collections, salary).
+3. **Savings Buffer (25%)**: Retained monthly liquidity margin (`Inflows - Outflows`).
+4. **Institutional Stability (30%)**: Maintaining positive balances; zero cheque bounces or ECS/NACH return dishonors.
+
+### Dual Engine: Google Gemini 3.5 AI &amp; Local Deterministic Fallback
+- **Google Gemini 3.5 Flash Integration**: Accepts raw external bank CSV files, extracts behavioral nuances (e.g. gambling debits vs. business stock purchases), and generates structured JSON with risk flags, probability of default (PD), and recommended credit limits.
+- **Deterministic Rule Engine**: An offline, mathematical fallback that executes the 4-pillar formula locally with zero API dependency.
+
+---
+
+## 💻 Terminal CLI Preview
+
+<div align="center">
+  <img src="docs/assets/terminal-preview.svg" alt="Tally Terminal CLI Interface" width="100%">
+</div>
+
+---
+
+## 🚀 Quick Start &amp; Terminal Commands
+
+### Prerequisites
+- Java Development Kit (**JDK 17 or higher**)
+- Operating System: macOS, Linux, or Windows (via PowerShell / Git Bash)
+
+### 1. Clone &amp; Navigate to the Project Root
+```bash
+git clone https://github.com/IVAN-GOEL/Tally-Bank-account-management-system.git
+cd Tally-Bank-account-management-system
 ```
-java.lang.Exception (Checked base)
-└── BankException (Custom domain base)
-    ├── InsufficientFundsException (Balance or overdraft floor breach)
-    ├── MinimumBalanceException (Savings account drops below ₹500 floor)
-    ├── WithdrawalLimitExceededException (Exceeded 5 withdrawals/month)
-    └── InvalidAmountException (Attempting transaction <= ₹0)
+
+> **Important**: Always execute commands from the project root folder. Do **not** `cd` into `src/`, otherwise `src/*.java` will not resolve.
+
+### 2. Compile All Java Sources
+```bash
+./build.sh
+```
+*(Or manually: `mkdir -p bin && javac -d bin src/*.java`)*
+
+### 3. Run the Comprehensive Test Suite (48/48 Scenarios)
+```bash
+./test.sh
+```
+*(Or manually: `java -cp bin TestPassBook`)*
+
+### 4. Launch the Interactive Terminal CLI
+```bash
+./run-cli.sh
+```
+*(Or manually: `java -cp bin Main`)*
+
+### 5. Launch the Web Server &amp; GUI Dashboard
+```bash
+./run-server.sh 8080
+```
+Open your web browser and visit:  
+**`http://localhost:8080`**
+
+---
+
+## 🎓 Viva Voce Oral Defense Cheat Sheet
+
+Use these quick answers when defending the project before your professor or lab examiner:
+
+### Q1: Why use an Abstract Class (`BankEntity`) instead of an Interface?
+> **Answer**: `BankEntity` defines a shared conceptual identity for all banking entities and allows for future non-abstract default state, whereas an interface represents a pure behavioral capability. Subclasses like `Account` and `Transaction` are fundamentally `BankEntities` (*is-a* relationship).
+
+### Q2: What is the difference between Method Overloading and Method Overriding in this project?
+> **Answer**:
+> - **Overloading (Compile-Time Polymorphism)**: Occurs within `Account.java`, where `deposit(double amount)` and `deposit(double amount, String description)` share the same name but different parameter lists.
+> - **Overriding (Run-Time Polymorphism)**: Occurs in subclasses like `SavingsAccount` and `CurrentAccount`, which override `withdraw()` and `monthEnd()` with `@Override` annotations to implement custom rules (such as minimum balance checks or overdraft charges).
+
+### Q3: How is Multilevel Inheritance demonstrated?
+> **Answer**: Through the hierarchy:  
+> `BankEntity` *(Abstract Base)* → `Account` *(Base Class)* → `SavingsAccount` *(Derived Class)* → `SeniorCitizenSavingsAccount` *(Multilevel Derived Subclass)*.  
+> `SeniorCitizenSavingsAccount` inherits the ₹500 floor and 5-withdrawal cap from `SavingsAccount`, but overrides `monthEnd()` to credit a preferential **4.25% p.a.** interest rate.
+
+### Q4: Why are custom exceptions in Tally Checked Exceptions?
+> **Answer**: `BankException` extends `java.lang.Exception` (not `RuntimeException`). In a banking ledger, balance shortages or overdraft breaches are recoverable business domain conditions that the caller must explicitly handle using `try-catch` blocks.
+
+### Q5: Where and why is Recursion used instead of loops?
+> **Answer**: In `Account.sumTransactionsRecursively()` and `Account.calculateCompoundInterestRecursively()`. They demonstrate recursive problem decomposition:
+> - Base Case: When the transaction list index reaches the end, or remaining years equal zero.
+> - Recursive Step: Accumulate the current element and call the function with the decremented subproblem (`index + 1` or `yearsRemaining - 1`).
+
+### Q6: What is the practical difference between the Static Nested Class and Member Inner Class in `Account.java`?
+> **Answer**:
+> - `Account.StatementSummary` is **static**: It does not hold an implicit reference to an enclosing `Account` instance; it is an independent data holder for metrics.
+> - `Account.PassbookAuditor` is a **member inner class**: It has direct, implicit access to the enclosing `Account`'s private fields (`holder`, `balance`, `transactions`) to perform live integrity audits.
+
+---
+
+## 📂 Project Structure
+
+```
+Tally-Bank-account-management-system/
+├── src/                                  # Pure Java source files (Syllabus implementation)
+│   ├── BankEntity.java                   # Abstract base class
+│   ├── Account.java                      # Base account class (overloading, recursion, nested classes)
+│   ├── SavingsAccount.java               # Derived class (3.5% interest, min balance floor)
+│   ├── SeniorCitizenSavingsAccount.java  # Multilevel derived class (4.25% preferential rate)
+│   ├── CurrentAccount.java               # Derived class (₹10,000 overdraft limit)
+│   ├── Transaction.java                  # Immutable ledger entry
+│   ├── ScoreIQ.java                      # Alternative credit scoring engine
+│   ├── BankException.java                # Checked exception base class
+│   ├── InsufficientFundsException.java   # Domain exception
+│   ├── MinimumBalanceException.java      # Domain exception
+│   ├── WithdrawalLimitExceededException.java # Domain exception
+│   ├── InvalidAmountException.java       # Domain exception
+│   ├── Main.java                         # Interactive terminal CLI controller
+│   ├── BankServer.java                   # Zero-dependency embedded HTTP server
+│   └── TestPassBook.java                 # 48-scenario unit test suite
+├── public/                               # Modern web application assets
+│   ├── index.html                        # Dashboard markup
+│   ├── app.js                            # Frontend controller & Gemini AI handler
+│   └── styles.css                        # Design system & dark theme styling
+├── docs/assets/                          # Visual SVGs and architectural diagrams
+│   ├── banner.svg                        # Project hero banner
+│   ├── architecture.svg                  # 4-tier system architecture
+│   ├── class-hierarchy.svg               # UML class diagram
+│   ├── scoreiq-pipeline.svg              # Underwriting workflow
+│   └── terminal-preview.svg              # Terminal CLI mockup
+├── build.sh                              # Source compilation script
+├── test.sh                               # Test execution script
+├── run-cli.sh                            # Terminal CLI launcher
+├── run-server.sh                         # Web server launcher
+└── README.md                             # Comprehensive documentation & syllabus guide
 ```
 
 ---
 
-## 3. How to Run & Test (Exact Terminal Commands)
+## 📄 License & Academic Integrity
 
-### 1. Compile All Java Sources
-```bash
-javac -d bin src/*.java
-```
-
-### 2. Run the Comprehensive Java Test Suite (48 Verification Scenarios)
-Verifies all OOP behaviors, exceptions, recursion, multilevel hierarchy, and file I/O:
-```bash
-java -cp bin TestPassBook
-```
-Expected output:
-```
-==================================================================
-          Tally Java OOP Test Suite (23 Verification Scenarios)
-==================================================================
- [PASS] ... (all scenarios)
---- Testing Syllabus Concepts (Inheritance, Abstraction, Recursion, I/O) ---
- [PASS] BankEntity polymorphic getEntityId returns account number
- [PASS] Multilevel subclass identifies as Senior Citizen
- [PASS] sumTransactionsRecursively sums transactions recursively
- [PASS] calculateCompoundInterestRecursively projects compound growth over 2 years (₹1,210.00)
- [PASS] exportStatementToFile writes header
-==================================================================
-Test Summary: 48 PASSED, 0 FAILED
-==================================================================
-```
-
-### 3. Run the Interactive Console Menu (For Lab & Viva Demonstrations)
-```bash
-java -cp bin Main
-```
-
-### 4. Launch the Web Server (Full Browser UI with Sidebar)
-```bash
-java -cp bin BankServer 8080
-```
-Open your browser and navigate to:
-```
-http://localhost:8080
-```
-
-### 5. Optional Python Test Suite (For Vercel Serverless Verification)
-```bash
-python3 -m unittest discover tests
-```
-Runs 23 unit tests verifying the Python models.
-
----
-
-## 4. ScoreIQ Credit Scoring Details
-
-ScoreIQ addresses **Credit Invisibility** in India for gig workers, fresh graduates, and self-employed professionals who lack CIBIL loan debt histories:
-- **Transparent & Deterministic**: Rule-based weighted calculation. No black-box machine learning.
-- **Score Scale**: 300 to 900 (mirroring standard Indian bureaus).
-- **Core Factors Evaluated**:
-  1. Transaction Activity (25% weight): Volume and frequency of healthy transactions.
-  2. Deposit Regularity (25% weight): Consistency of recurring incoming deposits.
-  3. Savings Habit (25% weight): Percentage of funds retained as liquid reserves.
-  4. Account Stability (25% weight): Maintaining positive balances and zero overdraft distress.
+This project is released under the **MIT License**. It is designed as an open-source educational reference for computer science students and educators. When submitting for university coursework, ensure appropriate attribution in accordance with your institution's academic integrity policies.
