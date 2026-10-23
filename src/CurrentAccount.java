@@ -1,12 +1,5 @@
 import java.util.List;
 
-/**
- * CurrentAccount.java
- * Demonstrates:
- * 1. Inheritance: 'extends Account'
- * 2. Method Overriding: @Override on withdraw(), monthEnd(), describe()
- * 3. Commercial Banking: Allows overdraft down to -₹10,000; charges flat ₹100 fee.
- */
 public class CurrentAccount extends Account {
     public static final double OVERDRAFT_LIMIT = 10000.00;
     public static final double MONTHLY_MAINTENANCE_FEE = 100.00;
@@ -23,11 +16,7 @@ public class CurrentAccount extends Account {
         super(holder, 0.0);
     }
 
-    /**
-     * [METHOD OVERRIDE]
-     * Overrides Account.withdraw().
-     * Permits the balance to drop below zero up to the overdraft limit (-₹10,000).
-     */
+    
     @Override
     public Transaction withdraw(double amount, String description) throws BankException {
         amount = Math.round(amount * 100.0) / 100.0;
@@ -54,11 +43,7 @@ public class CurrentAccount extends Account {
         return tx;
     }
 
-    /**
-     * [METHOD OVERRIDE]
-     * Overrides Account.monthEnd().
-     * Deducts a flat ₹100 monthly ledger and liquidity maintenance fee.
-     */
+    
     @Override
     public Transaction monthEnd() throws BankException {
         this.balance = Math.round((this.balance - MONTHLY_MAINTENANCE_FEE) * 100.0) / 100.0;
@@ -72,10 +57,7 @@ public class CurrentAccount extends Account {
         return tx;
     }
 
-    /**
-     * [METHOD OVERRIDE]
-     * Overrides Account.describe().
-     */
+    
     @Override
     public String describe() {
         return String.format(

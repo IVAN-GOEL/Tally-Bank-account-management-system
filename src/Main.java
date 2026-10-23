@@ -3,28 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Main.java - Interactive Console Tally Banking System
- * 
- * Perfect for College Lab Presentations, Practical Exams & Viva Demonstrations.
- * Implements and maps to all major units of the Object-Oriented Programming (OOP) syllabus:
- * 
- * 1. History & Evolution of OOP:
- *    - Encapsulation, reusability, polymorphism, abstraction (BankEntity).
- *    - Java vs C++ vs C# architecture (JVM bytecode, garbage collection, safety).
- * 2. Programming Fundamentals:
- *    - Control flow (switch-case, while, if-else), operators, datatypes, type conversions, wrapper classes.
- * 3. Introduction to Classes:
- *    - Constructors & method overloading, objects as parameters (transfer), returning objects (Transaction, StatementSummary),
- *      recursion (sumTransactionsRecursively, calculateCompoundInterestRecursively), final keyword, static nested & inner classes.
- * 4. I/O Basics:
- *    - Reading Console Input (Scanner), Writing Console Output (System.out.printf), File Handling (exportStatementToFile, readStatementFile).
- * 5. Inheritance:
- *    - Base & derived classes (Account, SavingsAccount, CurrentAccount), Multilevel hierarchy (SeniorCitizenSavingsAccount),
- *      abstract class (BankEntity), access modifiers (protected, public, private), method overriding (@Override).
- * 6. Exception Handling:
- *    - Exception types (checked vs unchecked), custom exception hierarchy (BankException, InsufficientFundsException, MinimumBalanceException).
- */
 public class Main {
     private static final List<Account> accounts = new ArrayList<>();
     private static Account activeAccount = null;
@@ -36,7 +14,6 @@ public class Main {
         System.out.println("            Featuring ScoreIQ Alternative Credit Scoring          ");
         System.out.println("==================================================================");
 
-        // Preload sample syllabus demo accounts
         SavingsAccount sa = new SavingsAccount("Asha Sharma", 15000.0);
         try {
             sa.deposit(5000.0, "Salary Inflow");
@@ -199,11 +176,11 @@ public class Main {
 
             Transaction tx;
             if (desc.isEmpty()) {
-                // Method Overloading: deposit(amount)
+
                 tx = activeAccount.deposit(amount);
                 System.out.println("[OOP Execution] Ran overloaded method Account.deposit(double amount).");
             } else {
-                // Method Overloading: deposit(amount, description)
+
                 tx = activeAccount.deposit(amount, desc);
                 System.out.println("[OOP Execution] Ran overloaded method Account.deposit(double amount, String description).");
             }
@@ -275,8 +252,8 @@ public class Main {
         System.out.printf("Enter Transfer Amount to %s (₹): ", target.getHolder());
         try {
             double amount = Double.parseDouble(scanner.nextLine().trim());
-            // Objects as parameters + Returning object arrays (Transaction[])
-            Transaction[] txs = activeAccount.transfer(target, amount);
+
+            activeAccount.transfer(target, amount);
 
             System.out.println("[OOP Execution] Ran activeAccount.transfer(Account target, double amount).");
             System.out.println("                Demonstrates Objects as Parameters & Passing Object References.");
@@ -334,12 +311,10 @@ public class Main {
         }
         System.out.println("------------------------------------------------------------------");
 
-        // Demonstrates Static Nested Class StatementSummary
         Account.StatementSummary summary = activeAccount.getStatementSummary();
         System.out.printf(" [Static Nested Class Summary] Total Inflow: ₹%,.2f | Total Outflow: ₹%,.2f | Ledger Records: %d\n",
             summary.totalDeposits, summary.totalWithdrawals, summary.transactionCount);
 
-        // Demonstrates Member Inner Class PassbookAuditor
         Account.PassbookAuditor auditor = activeAccount.new PassbookAuditor();
         auditor.performAudit();
         System.out.println("==================================================================");
@@ -351,12 +326,11 @@ public class Main {
         System.out.printf("\nExporting account ledger to file: %s ...\n", fileName);
 
         try {
-            // I/O File Handling: Writing to file
+
             activeAccount.exportStatementToFile(fileName);
             System.out.println("[OOP Execution] Ran activeAccount.exportStatementToFile() using FileWriter & PrintWriter.");
             System.out.println("File written successfully!");
 
-            // I/O File Handling: Reading from file to verify
             System.out.println("\nVerifying by reading file back via BufferedReader...");
             String content = Account.readStatementFile(fileName);
             System.out.println("File Preview (First 4 lines):");

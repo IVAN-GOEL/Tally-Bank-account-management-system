@@ -1,4 +1,4 @@
 #!/bin/bash
-mkdir -p bin
-javac -d bin src/*.java
-java -cp bin BankServer 8080
+set -e
+./build.sh
+exec java -cp bin BankServer 8080

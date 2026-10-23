@@ -1,18 +1,5 @@
 import java.util.List;
 
-/**
- * SeniorCitizenSavingsAccount.java
- * 
- * Demonstrates:
- * 1. Multilevel Hierarchy:
- *    BankEntity (Abstract) -> Account (Base) -> SavingsAccount (Derived) -> SeniorCitizenSavingsAccount (Multilevel)
- * 2. Method Overriding: Overrides monthEnd() and describe() with custom senior citizen benefits.
- * 3. Super Keyword: Invokes super constructors and extends behavior.
- * 4. Constants & Final: Uses specialized annual interest rate (4.25% p.a.).
- * 
- * Syllabus Mapping:
- * - Unit: Inheritance (Multilevel hierarchy, access modifiers, method overriding, super keyword).
- */
 public class SeniorCitizenSavingsAccount extends SavingsAccount {
     public static final double SENIOR_ANNUAL_INTEREST_RATE = 0.0425; // 4.25% per annum (senior bonus)
 
@@ -28,10 +15,7 @@ public class SeniorCitizenSavingsAccount extends SavingsAccount {
         super(holder, 0.0);
     }
 
-    /**
-     * [METHOD OVERRIDE]
-     * Overrides monthEnd() to apply preferential senior citizen interest rate of 4.25% p.a.
-     */
+    
     @Override
     public Transaction monthEnd() throws BankException {
         if (this.balance <= 0) {
@@ -54,10 +38,7 @@ public class SeniorCitizenSavingsAccount extends SavingsAccount {
         return tx;
     }
 
-    /**
-     * [METHOD OVERRIDE]
-     * Overrides describe() to detail the senior citizen privileges.
-     */
+    
     @Override
     public String describe() {
         return String.format(

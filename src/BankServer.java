@@ -10,19 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-/**
- * BankServer.java - Embedded Java HTTP Web & API Server
- * 
- * Uses standard Java SE library: com.sun.net.httpserver.HttpServer.
- * Requires ZERO external libraries, dependencies, or build tools.
- * 
- * Serves:
- * 1. Web UI static files from /public (index.html, style.css, app.js).
- * 2. JSON API endpoints: /api/classes, /api/create, /api/deposit, /api/withdraw,
- *    /api/transfer, /api/month-end, /api/scoreiq.
- */
 public class BankServer {
-    private static final int PORT = 8080;
     private static final String STATIC_DIR = "public";
 
     public static void main(String[] args) throws IOException {
@@ -52,7 +40,6 @@ public class BankServer {
             return;
         }
 
-        // API Contexts
         server.createContext("/api/classes", new ClassesHandler());
         server.createContext("/api/create", new CreateHandler());
         server.createContext("/api/deposit", new DepositHandler());
@@ -62,7 +49,6 @@ public class BankServer {
         server.createContext("/api/scoreiq", new ScoreIQHandler());
         server.createContext("/api/scoreiq/statement", new StatementReviewHandler());
 
-        // Static Files Context (Root /)
         server.createContext("/", new StaticFileHandler());
 
         server.setExecutor(null); // Default executor
@@ -74,10 +60,6 @@ public class BankServer {
         System.out.println("==================================================================");
         server.start();
     }
-
-    // ========================================================================
-    // JSON HELPERS & PARSING
-    // ========================================================================
 
     private static String readRequestBody(HttpExchange exchange) throws IOException {
         try (InputStream is = exchange.getRequestBody();
@@ -112,9 +94,7 @@ public class BankServer {
         return s.replace("\"", "\\\"").replace("\n", " ").replace("\r", "");
     }
 
-    /**
-     * Extracts simple string or double fields from JSON payload.
-     */
+    
     private static String extractJsonField(String json, String key) {
         if (json == null) return "";
         String pattern = "\"" + key + "\"\\s*:\\s*\"([^\"]*)\"";
@@ -188,7 +168,7 @@ public class BankServer {
         try { balance = Double.parseDouble(balStr); } catch (Exception ignored) {}
 
         List<Transaction> txList = new ArrayList<>();
-        // Extract transactions list
+
         int txStart = accountJson.indexOf("\"transactions\":[");
         if (txStart != -1) {
             int txEnd = accountJson.indexOf("]", txStart);
@@ -221,10 +201,6 @@ public class BankServer {
             return new Account(holder, balance, accNum, txList);
         }
     }
-
-    // ========================================================================
-    // HTTP HANDLERS
-    // ========================================================================
 
     static class ClassesHandler implements HttpHandler {
         @Override

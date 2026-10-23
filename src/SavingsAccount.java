@@ -2,13 +2,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-/**
- * SavingsAccount.java
- * Demonstrates:
- * 1. Inheritance: 'extends Account'
- * 2. Method Overriding: @Override on withdraw(), monthEnd(), describe()
- * 3. Domain Rules: ₹500 minimum balance, max 5 withdrawals/month, 3.5% p.a. interest.
- */
 public class SavingsAccount extends Account {
     public static final double MINIMUM_BALANCE = 500.00;
     public static final double ANNUAL_INTEREST_RATE = 0.035; // 3.5% per annum
@@ -42,13 +35,7 @@ public class SavingsAccount extends Account {
         return count;
     }
 
-    /**
-     * [METHOD OVERRIDE]
-     * Overrides Account.withdraw().
-     * Enforces:
-     * 1. Withdrawal count <= 5 per calendar month.
-     * 2. Remaining balance must be >= ₹1,000.
-     */
+    
     @Override
     public Transaction withdraw(double amount, String description) throws BankException {
         amount = Math.round(amount * 100.0) / 100.0;
@@ -56,7 +43,6 @@ public class SavingsAccount extends Account {
             throw new InvalidAmountException("Withdrawal amount must be greater than ₹0.");
         }
 
-        // Rule 1: Monthly limit
         int count = getCurrentMonthWithdrawalCount();
         if (count >= MAX_MONTHLY_WITHDRAWALS) {
             throw new WithdrawalLimitExceededException(String.format(
@@ -65,7 +51,6 @@ public class SavingsAccount extends Account {
             ));
         }
 
-        // Rule 2: Minimum balance
         double newBalance = Math.round((this.balance - amount) * 100.0) / 100.0;
         if (newBalance < MINIMUM_BALANCE) {
             throw new MinimumBalanceException(String.format(
@@ -82,12 +67,7 @@ public class SavingsAccount extends Account {
         return tx;
     }
 
-    /**
-     * [METHOD OVERRIDE]
-     * Overrides Account.monthEnd().
-     * Credits 1 month of interest at 3.5% p.a. on the closing balance.
-     * Formula: monthlyInterest = balance * 0.035 / 12
-     */
+    
     @Override
     public Transaction monthEnd() throws BankException {
         if (this.balance <= 0) {
@@ -110,10 +90,7 @@ public class SavingsAccount extends Account {
         return tx;
     }
 
-    /**
-     * [METHOD OVERRIDE]
-     * Overrides Account.describe().
-     */
+    
     @Override
     public String describe() {
         return String.format(

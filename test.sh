@@ -1,5 +1,4 @@
 #!/bin/bash
-if [ ! -d "bin" ]; then
-    ./build.sh
-fi
+set -e
+./build.sh
 java -cp bin TestPassBook

@@ -3,25 +3,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * ScoreIQ.java - Alternative Credit Scoring Engine
- * 
- * Demonstrates:
- * 1. Clean Object-Oriented Modeling: Encapsulated data classes (UserInputData, BankData, Factor, ScoreResult).
- * 2. Deterministic & Transparent Logic: Rule-based, weighted financial scoring for credit-invisible citizens
- *    (gig workers, fresh graduates, self-employed professionals, and rural workers) who lack formal CIBIL debt histories.
- * 3. Static Factory / Utility Methods: ScoreIQ.calculate(account) and ScoreIQ.calculate(user, bank).
- * 4. Dual Compatibility: Evaluates both live account ledgers (4 factors) and manual user forms (profile + banking inputs).
- * 
- * Syllabus Mapping:
- * - Programming Fundamentals: Control flow (if-else, switch, loops), operators, type conversion, arrays/lists.
- * - Introduction to Classes: Static nested classes, constructor overloading, returning objects, encapsulated fields.
- */
 public class ScoreIQ {
 
-    /**
-     * User profile inputs (for manual form entry or simulated applications).
-     */
+    
     public static class UserInputData {
         public String name = "Applicant";
         public int age = 29;
@@ -49,9 +33,7 @@ public class ScoreIQ {
         }
     }
 
-    /**
-     * Banking parameters extracted from account activity or entered manually.
-     */
+    
     public static class BankData {
         public double avgMonthlyBalance = 5000.0;
         public double avgMonthlyCredits = 35000.0;
@@ -72,16 +54,13 @@ public class ScoreIQ {
         }
     }
 
-    /**
-     * Factor representation - compatible with both college OOP 4-factor breakdown and SHAP explainability.
-     */
+    
     public static class Factor {
         public final String name;
         public final int points;
         public final double weight;
         public final String explanation;
 
-        // Extended explainability fields for Web UI
         public final String feature;
         public final String label;
         public final double shapValue;
@@ -121,9 +100,7 @@ public class ScoreIQ {
         }
     }
 
-    /**
-     * Score calculation output container.
-     */
+    
     public static class ScoreResult {
         public final int score;
         public final String band;
@@ -163,8 +140,7 @@ public class ScoreIQ {
             sb.append(String.format(Locale.US, "\"default_percentage\":\"%.1f%%\",", probabilityOfDefault * 100.0));
             sb.append("\"top_driver\":\"").append(escapeJson(topDriver)).append("\",");
             sb.append("\"explanation\":\"").append(escapeJson(explanation)).append("\",");
-            
-            // Factor breakdown list
+
             sb.append("\"breakdown\":[");
             for (int i = 0; i < breakdown.size(); i++) {
                 sb.append(breakdown.get(i).toJson());
@@ -172,7 +148,6 @@ public class ScoreIQ {
             }
             sb.append("],");
 
-            // Tips list
             sb.append("\"tips\":[");
             for (int i = 0; i < tips.size(); i++) {
                 sb.append("\"").append(escapeJson(tips.get(i))).append("\"");
@@ -180,7 +155,6 @@ public class ScoreIQ {
             }
             sb.append("],");
 
-            // User inputs
             sb.append("\"user_data\":{");
             sb.append("\"name\":\"").append(escapeJson(userData.name)).append("\",");
             sb.append("\"age\":").append(userData.age).append(",");
@@ -193,7 +167,6 @@ public class ScoreIQ {
             sb.append("\"monthly_upi_transactions\":").append(userData.monthlyUpiTransactions);
             sb.append("},");
 
-            // Bank data
             sb.append("\"bank_data\":{");
             sb.append(String.format(Locale.US, "\"avg_monthly_balance\":%.2f,", bankData.avgMonthlyBalance));
             sb.append(String.format(Locale.US, "\"avg_monthly_credits\":%.2f,", bankData.avgMonthlyCredits));
@@ -208,10 +181,7 @@ public class ScoreIQ {
         }
     }
 
-    /**
-     * Primary Score calculation based on active account ledger.
-     * Evaluates 4 transparent factors (25% weight each) mapped to CIBIL-like range (300 to 900).
-     */
+    
     public static ScoreResult calculate(Account account) {
         if (account == null) {
             return calculate(new UserInputData(), new BankData());
@@ -223,7 +193,6 @@ public class ScoreIQ {
         int totalTx = txs.size();
         int depositCount = 0;
         double totalDeposits = 0.0;
-        int withdrawalCount = 0;
         int upiCount = 0;
 
         for (Transaction tx : txs) {
@@ -234,8 +203,6 @@ public class ScoreIQ {
             if ("DEPOSIT".equalsIgnoreCase(type) || "TRANSFER_IN".equalsIgnoreCase(type) || "INTEREST".equalsIgnoreCase(type)) {
                 depositCount++;
                 totalDeposits += amt;
-            } else if ("WITHDRAWAL".equalsIgnoreCase(type) || "TRANSFER_OUT".equalsIgnoreCase(type) || "FEE".equalsIgnoreCase(type)) {
-                withdrawalCount++;
             }
 
             if (desc.contains("upi") || desc.contains("gpay") || desc.contains("phonepe") || desc.contains("transfer")) {
@@ -245,19 +212,16 @@ public class ScoreIQ {
 
         List<Factor> breakdown = new ArrayList<>();
 
-        // Factor 1: Transaction Activity (25% weight)
         int ptsActivity = Math.min(100, Math.max(30, totalTx * 18));
         String expActivity = String.format(Locale.US, "%d total transactions recorded. %s",
             totalTx, totalTx >= 5 ? "High transaction velocity proves active cash usage." : "Moderate activity. Keep using account for higher points.");
         breakdown.add(new Factor("Transaction Activity", ptsActivity, 0.25, expActivity));
 
-        // Factor 2: Deposit Regularity (25% weight)
         int ptsRegularity = Math.min(100, Math.max(35, depositCount * 22));
         String expRegularity = String.format(Locale.US, "%d inbound credits/deposits found. %s",
             depositCount, depositCount >= 4 ? "Frequent recurring deposits prove consistent cash inflow." : "Occasional deposits. Regular weekly/monthly credits improve stability.");
         breakdown.add(new Factor("Deposit Regularity", ptsRegularity, 0.25, expRegularity));
 
-        // Factor 3: Savings Habit (25% weight)
         int ptsSavings;
         if (balance <= 0) {
             ptsSavings = 25;
@@ -271,7 +235,6 @@ public class ScoreIQ {
             balance, totalDeposits, ptsSavings >= 70 ? "Healthy capital retention buffer." : "Consider building a higher retained savings reserve.");
         breakdown.add(new Factor("Savings Habit", ptsSavings, 0.25, expSavings));
 
-        // Factor 4: Account Stability (25% weight)
         int ptsStability;
         if (balance < 0) {
             ptsStability = 20; // Heavily penalize overdraft
@@ -287,7 +250,6 @@ public class ScoreIQ {
             : String.format(Locale.US, "Zero payment defaults or dishonored transactions. Solvent balance of ₹%,.2f maintained.", balance);
         breakdown.add(new Factor("Account Stability", ptsStability, 0.25, expStability));
 
-        // Calculate weighted score: 300 to 900
         double weightedPoints = 0.0;
         for (Factor f : breakdown) {
             weightedPoints += (f.points * f.weight);
@@ -295,7 +257,6 @@ public class ScoreIQ {
         int score = (int) Math.round(300.0 + (weightedPoints / 100.0) * 600.0);
         score = Math.max(300, Math.min(900, score));
 
-        // Band Determination
         String band;
         String riskBand;
         if (score >= 750) {
@@ -312,10 +273,8 @@ public class ScoreIQ {
             riskBand = (score >= 450) ? "High Risk" : "Very High Risk";
         }
 
-        // Probability of default: (900 - score) / 600
         double pd = Math.max(0.02, Math.min(0.95, (900.0 - score) / 600.0));
 
-        // Top Driver
         Factor topDriverFactor = breakdown.get(0);
         for (Factor f : breakdown) {
             if (f.points > topDriverFactor.points) {
@@ -327,7 +286,6 @@ public class ScoreIQ {
             "Calculated transparent score of %d/900 (%s, %s). Top positive contributor is '%s'.",
             score, band, riskBand, topDriver);
 
-        // Actionable tips
         List<String> tips = new ArrayList<>();
         if (balance < 0) {
             tips.add("Clear overdraft balance to quickly recover up to +140 score points.");
@@ -346,7 +304,6 @@ public class ScoreIQ {
             tips.add("Keep digital UPI and merchant payouts routed through your account.");
         }
 
-        // Echoed user profile
         UserInputData user = new UserInputData(
             account.getHolder(),
             28,
@@ -371,16 +328,13 @@ public class ScoreIQ {
         return new ScoreResult(score, band, riskBand, pd, topDriver, explanation, breakdown, tips, user, bank);
     }
 
-    /**
-     * Extended calculation for manual form entries (evaluates income, expenses, employment, UPI, bounces).
-     */
+    
     public static ScoreResult calculate(UserInputData user, BankData bank) {
         if (user == null) user = new UserInputData();
         if (bank == null) bank = new BankData();
 
         List<Factor> breakdown = new ArrayList<>();
 
-        // 1. Income to Expense Ratio
         double ratio = (user.monthlyExpenses <= 0) ? 3.0 : (user.monthlyIncome / user.monthlyExpenses);
         int ptsRatio = (int) Math.round(Math.min(100.0, Math.max(10.0, (ratio / 2.0) * 80.0)));
         breakdown.add(new Factor(
@@ -390,7 +344,6 @@ public class ScoreIQ {
                 ratio >= 1.4 ? "Comfortable operating margin." : "Narrow cashflow buffer.")
         ));
 
-        // 2. Employment Stability & Type
         int ptsEmp = (int) Math.round(Math.min(100.0, 45.0 + user.yearsEmployed * 12.0));
         breakdown.add(new Factor(
             "Employment Tenure", ptsEmp, 0.20,
@@ -398,7 +351,6 @@ public class ScoreIQ {
                 user.yearsEmployed, user.employmentType)
         ));
 
-        // 3. Payment Discipline (12m)
         int ptsDiscipline = Math.max(15, 100 - (user.missedPaymentsLast12m * 25));
         breakdown.add(new Factor(
             "Payment Discipline", ptsDiscipline, 0.25,
@@ -407,7 +359,6 @@ public class ScoreIQ {
                 : String.format(Locale.US, "%d missed payments in past 12 months penalized discipline score.", user.missedPaymentsLast12m)
         ));
 
-        // 4. Account Reserve & Balance
         double bal = bank.avgMonthlyBalance;
         int ptsBalance = (int) Math.round(Math.min(100.0, Math.max(25.0, (bal / 20000.0) * 85.0)));
         if (bank.bounceCount6m > 0) ptsBalance = Math.max(10, ptsBalance - (bank.bounceCount6m * 20));
@@ -417,14 +368,12 @@ public class ScoreIQ {
                 bal, bank.bounceCount6m)
         ));
 
-        // 5. Digital UPI Velocity
         int ptsUpi = (int) Math.round(Math.min(100.0, Math.max(30.0, (user.monthlyUpiTransactions / 40.0) * 90.0)));
         breakdown.add(new Factor(
             "Digital UPI Velocity", ptsUpi, 0.15,
             String.format(Locale.US, "%d monthly UPI transactions demonstrate active digital cash usage.", user.monthlyUpiTransactions)
         ));
 
-        // Compute weighted total
         double totalPts = 0.0;
         for (Factor f : breakdown) {
             totalPts += (f.points * f.weight);
@@ -432,7 +381,6 @@ public class ScoreIQ {
         int score = (int) Math.round(300.0 + (totalPts / 100.0) * 600.0);
         score = Math.max(300, Math.min(900, score));
 
-        // Band Determination
         String band;
         String riskBand;
         if (score >= 750) {
@@ -475,10 +423,7 @@ public class ScoreIQ {
         return new ScoreResult(score, band, riskBand, pd, topDriver, explanation, breakdown, tips, user, bank);
     }
 
-    /**
-     * Statement Review Result container.
-     * Contains comprehensive underwriting analysis, verdicts, credit limits, and strengths.
-     */
+    
     public static class StatementReview {
         public final ScoreResult scoreResult;
         public final String applicantName;
@@ -555,10 +500,7 @@ public class ScoreIQ {
         }
     }
 
-    /**
-     * Parses an external account statement (CSV, text, or bank ledger export)
-     * and generates an underwriting review with ScoreIQ alternative scoring.
-     */
+    
     public static StatementReview reviewStatement(String statementText, String applicantName, String employmentType) {
         if (applicantName == null || applicantName.trim().isEmpty()) {
             applicantName = "External Applicant";

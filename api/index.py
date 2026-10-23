@@ -26,13 +26,8 @@ from models import (
     SavingsAccount,
     SeniorCitizenSavingsAccount,
     CurrentAccount,
-    Transaction,
     ScoreIQ,
     BankError,
-    InsufficientFundsError,
-    MinimumBalanceError,
-    WithdrawalLimitExceededError,
-    InvalidAmountError,
 )
 
 app = Flask(__name__, static_folder="../public", static_url_path="")
@@ -277,7 +272,6 @@ def run_month_end():
     data = request.get_json(silent=True) or {}
     account = get_rehydrated_account(data.get("account"))
 
-    old_balance = account.balance
     tx = account.month_end()
 
     is_overridden = account.__class__ in (SavingsAccount, CurrentAccount)

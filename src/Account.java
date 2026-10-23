@@ -8,36 +8,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Account.java - Base Bank Account Class
- * 
- * Demonstrates:
- * 1. Inheritance & Abstraction: Extends abstract class BankEntity and serves as base class for Savings & Current.
- * 2. Encapsulation & Access Control: Protected internal state accessible to subclasses, manipulated via public methods.
- * 3. Constructor Overloading: Multiple constructors providing default values.
- * 4. Method Overloading: deposit(amount) / deposit(amount, description), withdraw(amount) / withdraw(amount, description).
- * 5. Objects as Parameters & Passing Object References: transfer(Account target, double amount).
- * 6. Returning Objects & Arrays: Returning Transaction objects, Transaction[] arrays, and StatementSummary objects.
- * 7. Recursion: sumTransactionsRecursively() and calculateCompoundInterestRecursively().
- * 8. Nested & Inner Classes: Static nested class StatementSummary and Member inner class PassbookAuditor.
- * 9. I/O File Handling: exportStatementToFile() and readStatementFile() using FileWriter, PrintWriter, BufferedReader.
- * 10. Exception Handling: Throws domain exceptions (BankException, InvalidAmountException, InsufficientFundsException).
- * 
- * Syllabus Mapping:
- * - Programming Fundamentals: Control flow, operators, datatypes, type conversion, wrapper classes, arrays.
- * - Introduction to Classes: Constructors, method overloading, objects as parameters, argument passing, recursion,
- *   access control, final, nested and inner classes.
- * - I/O Basics: Writing console output, File reading and writing.
- * - Inheritance: Base class, access modifiers, method overriding.
- * - Exception Handling: Exception types, throws and custom exceptions.
- */
 public class Account extends BankEntity {
     protected final String accountNumber;
     protected String holder;
     protected double balance;
     protected List<Transaction> transactions;
 
-    // Static nested class: Demonstrates Nested Classes
     public static class StatementSummary {
         public final String accountNumber;
         public final String holder;
@@ -65,7 +41,6 @@ public class Account extends BankEntity {
         }
     }
 
-    // Member Inner Class: Demonstrates Inner Classes accessing outer class state
     public class PassbookAuditor {
         public void performAudit() {
             System.out.println("  [Audit] Running internal audit for Account: " + accountNumber);
@@ -74,12 +49,11 @@ public class Account extends BankEntity {
         }
 
         public boolean isLedgerConsistent() {
-            // Inner class can directly read outer fields 'balance' and 'transactions'
+
             return balance >= -10000.0 && transactions != null;
         }
     }
 
-    // Constructor Overloading (1): Full Parameterized Constructor
     public Account(String holder, double balance, String accountNumber, List<Transaction> transactions) {
         if (holder == null || holder.trim().isEmpty()) {
             throw new IllegalArgumentException("Account holder name cannot be empty.");
@@ -92,12 +66,10 @@ public class Account extends BankEntity {
         this.transactions = (transactions != null) ? new ArrayList<>(transactions) : new ArrayList<>();
     }
 
-    // Constructor Overloading (2): Holder + Starting Balance
     public Account(String holder, double balance) {
         this(holder, balance, null, null);
     }
 
-    // Constructor Overloading (3): Holder only (Zero Balance default)
     public Account(String holder) {
         this(holder, 0.0);
     }
@@ -108,7 +80,6 @@ public class Account extends BankEntity {
         return "PB" + num;
     }
 
-    // Method Overloading (1): deposit with amount and custom description
     public Transaction deposit(double amount, String description) throws InvalidAmountException {
         amount = Math.round(amount * 100.0) / 100.0;
         if (amount <= 0) {
@@ -122,12 +93,10 @@ public class Account extends BankEntity {
         return tx;
     }
 
-    // Method Overloading (2): deposit with amount only (default description)
     public Transaction deposit(double amount) throws InvalidAmountException {
         return deposit(amount, "Cash Deposit");
     }
 
-    // Method Overloading (3): withdraw with amount and description (subclasses OVERRIDE this)
     public Transaction withdraw(double amount, String description) throws BankException {
         amount = Math.round(amount * 100.0) / 100.0;
         if (amount <= 0) {
@@ -147,17 +116,11 @@ public class Account extends BankEntity {
         return tx;
     }
 
-    // Method Overloading (4): withdraw with amount only
     public Transaction withdraw(double amount) throws BankException {
         return withdraw(amount, "Cash Withdrawal");
     }
 
-    /**
-     * Demonstrates:
-     * - Objects as parameters (Account target)
-     * - Returning Arrays of objects (Transaction[])
-     * - Collaboration between objects via polymorphic method dispatch
-     */
+    
     public Transaction[] transfer(Account target, double amount) throws BankException {
         amount = Math.round(amount * 100.0) / 100.0;
         if (amount <= 0) {
@@ -170,27 +133,19 @@ public class Account extends BankEntity {
             throw new BankException("Cannot transfer funds to the same account.");
         }
 
-        // Subclass-specific withdrawal rule executed polymorphically
         Transaction srcTx = this.withdraw(amount, String.format("Transfer to A/C %s (%s)", target.getAccountNumber(), target.getHolder()));
-        // Beneficiary deposit
+
         Transaction destTx = target.deposit(amount, String.format("Transfer from A/C %s (%s)", this.accountNumber, this.holder));
 
         return new Transaction[]{srcTx, destTx};
     }
 
-    /**
-     * Month-end ledger settlement.
-     * Default base implementation does nothing.
-     * Subclasses OVERRIDE this method.
-     */
+    
     public Transaction monthEnd() throws BankException {
         return null;
     }
 
-    /**
-     * Computes statement summary and returns a StatementSummary object.
-     * Demonstrates returning objects.
-     */
+    
     public StatementSummary getStatementSummary() {
         double totalDep = 0.0;
         double totalWith = 0.0;
@@ -209,45 +164,28 @@ public class Account extends BankEntity {
         );
     }
 
-    // ==========================================
-    // RECURSION DEMONSTRATIONS (Syllabus Topic)
-    // ==========================================
-
-    /**
-     * Recursively sums transaction amounts in a list.
-     * Demonstrates recursion: base case when index reaches list size.
-     */
+    
     public static double sumTransactionsRecursively(List<Transaction> list, int index) {
-        // Base case: end of list reached
+
         if (list == null || index >= list.size()) {
             return 0.0;
         }
-        // Recursive case: current transaction amount + sum of remaining transactions
+
         return list.get(index).getAmount() + sumTransactionsRecursively(list, index + 1);
     }
 
-    /**
-     * Recursively calculates compound interest projection over a number of years.
-     * Demonstrates recursion with compound accumulation.
-     */
+    
     public double calculateCompoundInterestRecursively(double principal, double annualRate, int yearsRemaining) {
-        // Base case: 0 years remaining returns accumulated principal
+
         if (yearsRemaining <= 0) {
             return Math.round(principal * 100.0) / 100.0;
         }
-        // Recursive case: apply one year's interest and recurse for remaining years
+
         double accumulated = principal * (1.0 + annualRate);
         return calculateCompoundInterestRecursively(accumulated, annualRate, yearsRemaining - 1);
     }
 
-    // ==========================================
-    // FILE I/O DEMONSTRATIONS (Syllabus Topic)
-    // ==========================================
-
-    /**
-     * Writes the account statement to a local text file.
-     * Demonstrates File Output (FileWriter, PrintWriter, try-with-resources).
-     */
+    
     public void exportStatementToFile(String filePath) throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             writer.println("==================================================================");
@@ -268,10 +206,7 @@ public class Account extends BankEntity {
         }
     }
 
-    /**
-     * Reads a text file line-by-line and returns its content as a String.
-     * Demonstrates File Input (FileReader, BufferedReader, try-with-resources).
-     */
+    
     public static String readStatementFile(String filePath) throws IOException {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
@@ -283,7 +218,6 @@ public class Account extends BankEntity {
         return sb.toString();
     }
 
-    // BankEntity Abstract Method Implementations
     @Override
     public String getEntityId() {
         return accountNumber;
@@ -298,13 +232,11 @@ public class Account extends BankEntity {
         return "Standard Account";
     }
 
-    // Accessors
     public String getAccountNumber() { return accountNumber; }
     public String getHolder() { return holder; }
     public double getBalance() { return balance; }
     public List<Transaction> getTransactions() { return Collections.unmodifiableList(transactions); }
 
-    // JSON Serialization
     @Override
     public String toJson() {
         StringBuilder sb = new StringBuilder();
