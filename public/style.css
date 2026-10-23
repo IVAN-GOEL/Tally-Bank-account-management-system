@@ -1744,6 +1744,100 @@ body {
   display: none !important;
 }
 
+/* Gemini API Configuration Box */
+.gemini-key-box {
+  background-color: #ffffff;
+  border: 1px solid rgba(28, 26, 23, 0.22);
+  border-left: 3px solid var(--accent-green);
+  border-radius: var(--radius-sharp);
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+.gemini-key-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.gemini-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent-green);
+  letter-spacing: 0.08em;
+  display: block;
+}
+
+.gemini-subtext {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+  display: block;
+  margin-top: 2px;
+}
+
+.gemini-status-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  background-color: var(--accent-green-light);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+
+.gemini-status-tag.ai-active {
+  background-color: #e3edf7;
+  color: #17528a;
+  border-color: #17528a;
+}
+
+.gemini-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gemini-input-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+
+.gemini-input-wrapper input {
+  width: 100%;
+  padding-right: 36px;
+  font-size: 0.8rem;
+}
+
+.btn-toggle-key {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.btn-toggle-key:hover {
+  color: var(--ink);
+}
+
+.engine-pill {
+  background-color: var(--accent-green-light) !important;
+  color: var(--accent-green) !important;
+  font-weight: 600;
+}
+
 /* Presets Bar */
 .statement-presets-bar {
   display: flex;

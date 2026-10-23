@@ -414,6 +414,30 @@
               </div>
             </div>
 
+            <!-- Gemini AI Configuration Bar -->
+            <div class="gemini-key-box">
+              <div class="gemini-key-header">
+                <div>
+                  <span class="gemini-badge mono">GOOGLE GEMINI API INTEGRATION</span>
+                  <span class="gemini-subtext">Provide your Gemini API key to evaluate with Gemini LLM, or leave blank to use the built-in deterministic underwriter.</span>
+                </div>
+                <div class="gemini-status-tag mono" id="gemini-status-indicator">ENGINE: READY</div>
+              </div>
+              <div class="gemini-input-row">
+                <div class="gemini-input-wrapper">
+                  <input type="password" id="siq-gemini-key" class="form-input mono" placeholder="Google Gemini API Key">
+                  <button type="button" id="btn-toggle-gemini-key" class="btn-toggle-key" title="Show / Hide API Key">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
+                </div>
+                <button type="button" id="btn-save-gemini-key" class="btn btn-secondary btn-sm">Save Key</button>
+                <button type="button" id="btn-clear-gemini-key" class="btn btn-secondary btn-sm">Clear</button>
+              </div>
+            </div>
+
             <!-- Statement Input Form -->
             <form id="form-scoreiq-statement" class="statement-input-form">
               <div class="form-row-2">
@@ -480,6 +504,7 @@
                     <span class="review-pill" id="review-emp-display">Gig Worker</span>
                     <span class="review-pill mono" id="review-tx-display">14 Transactions Evaluated</span>
                     <span class="review-pill mono" id="review-upi-display">9 UPI Transfers</span>
+                    <span class="review-pill mono engine-pill" id="review-engine-display">Engine: Local Underwriter</span>
                   </div>
                 </div>
                 <div class="review-header-right">
