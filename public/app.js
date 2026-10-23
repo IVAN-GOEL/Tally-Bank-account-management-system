@@ -592,6 +592,27 @@ const STATEMENT_PRESETS = {
 2026-09-18, CHEQUE BOUNCE CHARGES INSUFFICIENT DR, 590.00, 0.00, 4170.00
 2026-09-22, ATM CASH WITHDRAWAL DR, 4000.00, 0.00, 170.00
 2026-09-25, ECS RETURN / PENALTY DISHONOR DR, 590.00, 0.00, -420.00`
+  },
+  distressed: {
+    name: "Rajesh G. Verma",
+    emp: "unemployed / distressed",
+    text: `Date, Narration, Debit, Credit, Balance
+2026-09-01, Opening Balance, 0.00, 0.00, 450.00
+2026-09-02, UPI / PayTM Wallet Load DR, 1200.00, 0.00, -750.00
+2026-09-03, NACH / Bajaj Finance Loan EMI Bounce Penalty DR, 590.00, 0.00, -1340.00
+2026-09-05, ECS RETURN / PENALTY DISHONOR INSUFFICIENT FUNDS DR, 590.00, 0.00, -1930.00
+2026-09-07, UPI / P2P Borrowing from Friend CR, 0.00, 2500.00, 570.00
+2026-09-08, ATM CASH WITHDRAWAL DR, 2000.00, 0.00, -1430.00
+2026-09-10, CHEQUE BOUNCE CHARGES INSUFFICIENT BALANCE DR, 590.00, 0.00, -2020.00
+2026-09-12, ECS RETURN / PENALTY DISHONOR HDFC PERSONAL LOAN DR, 590.00, 0.00, -2610.00
+2026-09-15, OVERDRAFT PENAL INTEREST & MIN BAL CHARGES DR, 1450.00, 0.00, -4060.00
+2026-09-18, ECS RETURN / PENALTY DISHONOR MUTHOOT GOLD LOAN DR, 590.00, 0.00, -4650.00
+2026-09-20, NACH / KREDITBEE OVERDUE LOAN RECOVERY DR, 4800.00, 0.00, -9450.00
+2026-09-22, ECS RETURN / PENALTY DISHONOR CASHE DR, 590.00, 0.00, -10040.00
+2026-09-24, UPI / DREAM11 WAGERING DEBIT DR, 1500.00, 0.00, -11540.00
+2026-09-26, CHEQUE BOUNCE CHARGES INSUFFICIENT BALANCE DR, 590.00, 0.00, -12130.00
+2026-09-28, RECOVERY AGENCY LEGAL NOTICE CHARGES DR, 2500.00, 0.00, -14630.00
+2026-09-30, ECS RETURN / PENALTY DISHONOR SBI CARD DR, 590.00, 0.00, -15220.00`
   }
 };
 
@@ -666,7 +687,7 @@ function updateGeminiStatusUI() {
 }
 
 async function evaluateStatementWithGemini(statementText, applicantName, employmentType, apiKey) {
-  const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+  const models = ["gemini-3.5-flash-lite", "gemini-flash-latest", "gemini-pro-latest", "gemini-2.5-flash"];
   let lastError = null;
 
   const prompt = `You are an expert banking credit underwriter. Parse the provided bank account statement / CSV records for applicant: "${applicantName}", employment type: "${employmentType}".
@@ -862,13 +883,18 @@ function evaluateStatementLocally(statementText, applicantName, employmentType) 
   const netMargin = totalCredits - totalDebits;
   const burnRate = totalCredits > 0 ? Math.min(150.0, (totalDebits / totalCredits) * 100.0) : 100.0;
 
-  const ptsActivity = Math.min(100, Math.max(30, txCount * 18));
-  const ptsRegularity = Math.min(100, Math.max(35, (totalCredits > 0 ? 70 : 35) + (salaryFound ? 20 : 0)));
-  const ptsSavings = netMargin > 0 ? Math.min(100, Math.max(30, Math.round((netMargin / totalCredits) * 100) + 20)) : 25;
-  const ptsStability = bounceCount > 0 ? Math.max(20, 70 - bounceCount * 25) : 90;
+  const ptsActivity = Math.min(100, Math.max(25, (txCount - bounceCount) * 12));
+  const ptsRegularity = Math.min(100, Math.max(20, (totalCredits > 0 ? (salaryFound ? 85 : 45) : 20)));
+  const ptsSavings = netMargin > 0 ? Math.min(100, Math.max(30, Math.round((netMargin / totalCredits) * 100) + 20)) : Math.max(5, 20 - Math.min(15, Math.round(Math.abs(netMargin) / 2000)));
+  const ptsStability = bounceCount > 0 ? Math.max(5, 75 - bounceCount * 15) : 90;
 
-  const weighted = (ptsActivity * 0.25) + (ptsRegularity * 0.25) + (ptsSavings * 0.25) + (ptsStability * 0.25);
+  const weighted = (ptsActivity * 0.20) + (ptsRegularity * 0.25) + (ptsSavings * 0.25) + (ptsStability * 0.30);
   let score = Math.max(300, Math.min(900, Math.round(300 + (weighted / 100.0) * 600.0)));
+  if (bounceCount >= 4) {
+    score = Math.max(300, Math.min(450, score - bounceCount * 25));
+  } else if (bounceCount >= 2 && netMargin < 0) {
+    score = Math.max(300, Math.min(495, score - 60));
+  }
 
   let band, riskBand, pd;
   if (score >= 750) {
